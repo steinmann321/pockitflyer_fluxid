@@ -1,5 +1,5 @@
 ---
-id: m01-e01-t13
+id: m01-e01-t12
 title: Image Carousel E2E Validation
 epic: m01-e01
 milestone: m01

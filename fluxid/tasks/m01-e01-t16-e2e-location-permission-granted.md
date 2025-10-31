@@ -1,5 +1,5 @@
 ---
-id: m01-e01-t17
+id: m01-e01-t16
 title: Location Permission Granted E2E Validation
 epic: m01-e01
 milestone: m01
