@@ -1,0 +1,16 @@
+# Maestro Global Configuration
+# This file contains global settings for all Maestro test flows
+
+appId: com.example.pockitflyerApp
+
+env:
+  # Timeout for driver startup (milliseconds)
+  MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000  # 2 minutes
+
+  # Default timeout for individual commands (milliseconds)
+  MAESTRO_COMMAND_TIMEOUT: 15000          # 15 seconds
+
+# Tags for organizing and filtering tests
+tags:
+  - e2e
+  - mobile

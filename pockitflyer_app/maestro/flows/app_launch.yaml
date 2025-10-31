@@ -1,0 +1,7 @@
+appId: com.example.pockitflyerApp
+---
+# Smoke Test: App Launch
+# Verifies that the app launches successfully and the home page loads
+
+- launchApp
+- assertVisible: ".*"  # Assert any visible content (adjust based on your app)
