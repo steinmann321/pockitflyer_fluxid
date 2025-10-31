@@ -25,15 +25,3 @@ linter:
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
-
-# Maestro testability lints
-linter:
-  rules:
-    - unawaited_futures
-    - avoid_void_async
-    - cancel_subscriptions
-    - prefer_null_aware_operators
-    - unnecessary_null_checks
-    - prefer_const_constructors
-    - avoid_print
-    - use_key_in_widget_constructors

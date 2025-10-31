@@ -14,7 +14,8 @@ if ! python -c "import testmon" 2>/dev/null; then
   pytest -m "tdd_green and not integration" -x "$@" -q || test_exit=$?
 else
   echo "[testmon] Running affected tests only..."
-  pytest --testmon -m "tdd_green and not integration" -x "$@" -q || test_exit=$?
+  # testmon doesn't support branch coverage with pytest-cov, so disable --cov
+  pytest --testmon -m "tdd_green and not integration" -x "$@" -q --no-cov || test_exit=$?
 fi
 
 # Exit code 5 means no tests collected - this is OK for initial setup

@@ -23,14 +23,9 @@ fi
 # Clean previous data to avoid stale measurements
 coverage erase || true
 
-# Use testmon if available for smart test selection
-# Note: Using --testmon-noselect to avoid testmon/coverage conflicts
-if python -c "import testmon" 2>/dev/null; then
-  echo "[coverage] Running affected tests with pytest-testmon..."
-  python -m pytest --testmon-noselect -m "tdd_green and not integration" -q --cov=. --cov-report=term --cov-fail-under=90
-else
-  echo "[coverage] pytest-testmon not installed, running all tests..."
-  python -m pytest -m "tdd_green and not integration" -q --cov=. --cov-report=term --cov-fail-under=90
-fi
+# For coverage enforcement, we need to run without testmon since they conflict with branch coverage
+# Just run all green tests with coverage
+echo "[coverage] Running all green tests with coverage..."
+python -m pytest -m "tdd_green and not integration" -q --cov=. --cov-report=term --cov-fail-under=90
 
 popd >/dev/null

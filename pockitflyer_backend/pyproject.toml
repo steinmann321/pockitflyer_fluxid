@@ -42,6 +42,9 @@ markers = [
   "slow: marks tests as slow (deselect with '-m \"not slow\"')",
   "integration: marks integration tests",
   "unit: marks unit tests",
+  "tdd_green: marks tests that are passing (safe to commit)",
+  "tdd_red: marks tests that are failing (blocks commit until implemented)",
+  "tdd_refactor: marks tests during refactoring (blocks commit until complete)",
 ]
 
 [tool.coverage.run]
