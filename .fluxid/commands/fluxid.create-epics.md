@@ -83,14 +83,6 @@ Tasks are created AFTER epics using the `/fluxid.create-tasks` command.
 - Epics define features (WHAT), tasks define implementation (HOW)
 - Clean separation of concerns
 
-### Rule 3: Mandatory E2E Validation Epic
-**THE LAST EPIC IN EVERY MILESTONE MUST BE E2E VALIDATION WITHOUT MOCKS**
-- Always the final epic: `mXX-eXX-e2e-milestone-validation.md`
-- Tests complete milestone with real backend, real database, real services
-- Validates user workflows end-to-end as shipped to users
-- NO MOCKS allowed - this is the final quality gate
-- Use `.fluxid/templates/e2e-epic-template.md` for structure
-
 ## Epic Decomposition Guidelines
 
 ### Think in User Flows (PRIMARY APPROACH)
@@ -174,8 +166,6 @@ List potential **user flow epics** (typically 3-6 per milestone) focusing on:
 - Sequential dependencies (which flows build on others?)
 - Clear entry and exit points for each flow
 
-**Remember**: You will also create ONE mandatory E2E validation epic as the final epic.
-
 ### Step 3: Validate Each Epic
 For each candidate, rigorously apply:
 - The Critical Rules (both Rule 1 and Rule 2)
@@ -188,10 +178,9 @@ Map out:
 - What is the logical sequential order?
 - What external dependencies exist?
 - How does each flow build on previous ones?
-- **Final epic is always E2E validation** (depends on all user flow epics)
 
-### Step 5: Create User Flow Epic Files
-For each validated user flow epic (e01 through eXX-1):
+### Step 5: Create Epic Files
+For each validated user flow epic:
 1. Assign sequential, immutable ID: e01, e02, e03, etc.
 2. Create filename: `mXX-eXX-descriptive-name.md` (descriptive = what user journey is delivered)
 3. Copy `.fluxid/templates/epic-template.md` structure exactly
@@ -201,15 +190,6 @@ For each validated user flow epic (e01 through eXX-1):
 7. Write Success Criteria WITH test hints (see guidelines in this command)
 8. List task placeholders (IDs only, refined in next stage)
 9. Document Dependencies: Other user flows or external systems required
-
-### Step 6: Create E2E Validation Epic (Mandatory Final Epic)
-After all user flow epics:
-1. Assign final ID: eXX (where XX is one more than last user flow epic)
-2. Create filename: `mXX-eXX-e2e-milestone-validation.md`
-3. Copy `.fluxid/templates/e2e-epic-template.md` structure exactly
-4. Customize for this milestone's specific user flows
-5. List dependencies: all previous user flow epics (e01 through eXX-1)
-6. Define E2E test tasks that validate all user flows together
 
 ## Epic File Structure
 
@@ -267,7 +247,6 @@ After creating initial epic files:
 - `m01-e02-user-views-product-details-and-adds-to-cart`: User selects product → views details/images → chooses options → adds to cart → sees confirmation
 - `m01-e03-user-reviews-cart-and-proceeds-to-checkout`: User opens cart → reviews items → updates quantities → removes items → proceeds to checkout
 - `m01-e04-user-completes-payment-and-receives-confirmation`: User enters shipping → enters payment → reviews order → submits → sees confirmation → receives email
-- `m01-e05-e2e-milestone-validation`: E2E validation of complete purchase flow
 
 ### Example B: Data Processing CLI Tool
 
@@ -277,6 +256,5 @@ After creating initial epic files:
 - `m01-e01-user-configures-processing-rules`: User runs config command → defines input format → sets transformation rules → validates config → saves settings
 - `m01-e02-user-processes-file-and-sees-results`: User runs process command → tool reads file → applies transformations → user sees progress → tool outputs results
 - `m01-e03-user-handles-errors-and-retries`: User encounters error → tool shows clear message → user fixes issue → retries processing → succeeds
-- `m01-e04-e2e-milestone-validation`: E2E validation of complete processing workflow
 
 Each epic represents a complete user journey from trigger to completion, implemented sequentially to build up the milestone's full user experience.
