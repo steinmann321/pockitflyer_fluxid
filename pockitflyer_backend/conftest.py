@@ -6,8 +6,10 @@ from model_bakery import baker
 def user_factory(db):
     def make_user(**kwargs):
         User = get_user_model()
+        user_count = User.objects.count()
         defaults = {
-            'email': kwargs.get('email', f"test+{User.objects.count()}@example.com"),
+            'email': kwargs.get('email', f"test+{user_count}@example.com"),
+            'username': kwargs.get('username', f"user{user_count}"),
         }
         defaults.update(kwargs)
         user = baker.make(User, **defaults)

@@ -1,244 +1,223 @@
 project: PockitFlyer
 last_updated: '2025-11-01'
 milestones:
-- id: m01
-  title: Anonymous Discovery - Browse and Discover Local Flyers
-  deliverable: Users can browse, filter, search, and discover local digital flyers
-    without authentication. The home screen provides a complete discovery experience
-    with a smart-ranked feed, multi-tier filtering system (category tags + Near Me),
-    in-place search, and full flyer details displayed in cards. Users can view creator
-    profiles and see distance to each flyer based on their device location. All functionality
-    works with real backend APIs, database, and geocoding integration.
-  complete: false
-  epics:
-  - id: m01-e01
-    title: User Browses Local Flyers Feed
+  - id: m01
+    title: Anonymous Discovery - Browse and Discover Local Flyers
+    deliverable: Users can browse, filter, search, and discover local digital flyers without authentication. The home screen provides a complete discovery experience with a smart-ranked feed, multi-tier filtering system (category tags + Near Me), in-place search, and full flyer details displayed in cards. Users can view creator profiles and see distance to each flyer based on their device location. All functionality works with real backend APIs, database, and geocoding integration.
     complete: false
-    tasks:
-    - id: m01-e01-t01
-      title: Create User Database Model
-      complete: false
-    - id: m01-e01-t02
-      title: Create Flyer Database Model
-      complete: false
-    - id: m01-e01-t03
-      title: Implement Geocoding Service with Circuit Breaker
-      complete: false
-    - id: m01-e01-t04
-      title: Implement Feed API Endpoint
-      complete: false
-    - id: m01-e01-t05
-      title: Implement iOS Location Permission and Service
-      complete: false
-    - id: m01-e01-t06
-      title: Create Flyer Card Widget
-      complete: false
-    - id: m01-e01-t07
-      title: Implement Feed API Client and Models
-      complete: false
-    - id: m01-e01-t08
-      title: Create Home Feed Screen with Pull-to-Refresh
-      complete: false
-    - id: m01-e01-t09
-      title: Performance Optimization and Database Indexing
-      complete: false
-    - id: m01-e01-t10
-      title: App Launch Shows Feed E2E Validation
-      complete: false
-    - id: m01-e01-t11
-      title: Flyer Card Complete Info E2E Validation
-      complete: false
-    - id: m01-e01-t12
-      title: Image Carousel E2E Validation
-      complete: false
-    - id: m01-e01-t13
-      title: Distance Calculations E2E Validation
-      complete: false
-    - id: m01-e01-t14
-      title: Feed Scrolling E2E Validation
-      complete: false
-    - id: m01-e01-t15
-      title: Pull-to-Refresh E2E Validation
-      complete: false
-    - id: m01-e01-t16
-      title: Location Permission Granted E2E Validation
-      complete: false
-    - id: m01-e01-t17
-      title: Location Permission Denied E2E Validation
-      complete: false
-    - id: m01-e01-t18
-      title: Feed Empty State E2E Validation
-      complete: false
-    - id: m01-e01-t19
-      title: Feed Performance E2E Validation
-      complete: false
-    - id: m01-e01-t20
-      title: New Flyer Appears After Refresh E2E Validation
-      complete: false
-  - id: m01-e02
-    title: User Filters and Searches Flyers
+    epics:
+      - id: m01-e01
+        title: User Browses Local Flyers Feed
+        complete: false
+        tasks:
+          - id: m01-e01-t01
+            title: Create User Database Model
+            complete: true
+          - id: m01-e01-t02
+            title: Create Flyer Database Model
+            complete: false
+          - id: m01-e01-t03
+            title: Implement Geocoding Service with Circuit Breaker
+            complete: false
+          - id: m01-e01-t04
+            title: Implement Feed API Endpoint
+            complete: false
+          - id: m01-e01-t05
+            title: Implement iOS Location Permission and Service
+            complete: false
+          - id: m01-e01-t06
+            title: Create Flyer Card Widget
+            complete: false
+          - id: m01-e01-t07
+            title: Implement Feed API Client and Models
+            complete: false
+          - id: m01-e01-t08
+            title: Create Home Feed Screen with Pull-to-Refresh
+            complete: false
+          - id: m01-e01-t09
+            title: Performance Optimization and Database Indexing
+            complete: false
+          - id: m01-e01-t10
+            title: App Launch Shows Feed E2E Validation
+            complete: false
+          - id: m01-e01-t11
+            title: Flyer Card Complete Info E2E Validation
+            complete: false
+          - id: m01-e01-t12
+            title: Image Carousel E2E Validation
+            complete: false
+          - id: m01-e01-t13
+            title: Distance Calculations E2E Validation
+            complete: false
+          - id: m01-e01-t14
+            title: Feed Scrolling E2E Validation
+            complete: false
+          - id: m01-e01-t15
+            title: Pull-to-Refresh E2E Validation
+            complete: false
+          - id: m01-e01-t16
+            title: Location Permission Granted E2E Validation
+            complete: false
+          - id: m01-e01-t17
+            title: Location Permission Denied E2E Validation
+            complete: false
+          - id: m01-e01-t18
+            title: Feed Empty State E2E Validation
+            complete: false
+          - id: m01-e01-t19
+            title: Feed Performance E2E Validation
+            complete: false
+          - id: m01-e01-t20
+            title: New Flyer Appears After Refresh E2E Validation
+            complete: false
+      - id: m01-e02
+        title: User Filters and Searches Flyers
+        complete: false
+        tasks:
+          - id: m01-e02-t01
+            title: Extend Flyer API with Filter and Search Parameters
+            complete: false
+          - id: m01-e02-t02
+            title: Add Database Indexes for Efficient Filtering
+            complete: false
+          - id: m01-e02-t03
+            title: Create Category Filter UI Component
+            complete: false
+          - id: m01-e02-t04
+            title: Create Near Me Toggle Filter
+            complete: false
+          - id: m01-e02-t05
+            title: Create Search Bar with Debouncing
+            complete: false
+          - id: m01-e02-t06
+            title: Implement Filter State Management
+            complete: false
+          - id: m01-e02-t07
+            title: E2E Single Category Filter Selection
+            complete: false
+          - id: m01-e02-t08
+            title: E2E Multiple Category Filter Selection
+            complete: false
+          - id: m01-e02-t09
+            title: E2E Category Filter Deselection
+            complete: false
+          - id: m01-e02-t10
+            title: E2E Near Me Filter Toggle
+            complete: false
+          - id: m01-e02-t11
+            title: E2E Near Me Filter Deactivation
+            complete: false
+          - id: m01-e02-t12
+            title: E2E Near Me Filter Empty State
+            complete: false
+          - id: m01-e02-t13
+            title: E2E Search Real-Time Feed Update
+            complete: false
+          - id: m01-e02-t14
+            title: E2E Search Partial Word Match
+            complete: false
+          - id: m01-e02-t15
+            title: E2E Search No Results Empty State
+            complete: false
+          - id: m01-e02-t16
+            title: E2E Search Clear Restores Feed
+            complete: false
+          - id: m01-e02-t17
+            title: E2E Category Plus Near Me Combination
+            complete: false
+          - id: m01-e02-t18
+            title: E2E Category Plus Search Combination
+            complete: false
+          - id: m01-e02-t19
+            title: E2E Near Me Plus Search Combination
+            complete: false
+          - id: m01-e02-t20
+            title: E2E All Filters Combined
+            complete: false
+          - id: m01-e02-t21
+            title: E2E Filter State Persists During Session
+            complete: false
+          - id: m01-e02-t22
+            title: E2E Pull-To-Refresh Maintains Filters
+            complete: false
+          - id: m01-e02-t23
+            title: E2E Search With Special Characters
+            complete: false
+          - id: m01-e02-t24
+            title: E2E Search Debouncing Validation
+            complete: false
+      - id: m01-e03
+        title: User Views Flyer Details and Location
+        complete: false
+        tasks: []
+      - id: m01-e04
+        title: User Views Creator Profiles
+        complete: false
+        tasks: []
+      - id: m01-e05
+        title: E2E Milestone Validation (No Mocks)
+        complete: false
+        tasks: []
+  - id: m02
+    title: User Authentication and Profile Management
+    deliverable: Users can create accounts with email registration, log in securely, and manage their public profile. The authentication system is fully integrated with JWT-based security, and users can edit their profile picture and name. Registration automatically creates an empty default profile. The header login button switches to a profile avatar when authenticated, providing access to the user's own profile page. All profile pages are publicly viewable by anyone, including anonymous users.
     complete: false
-    tasks:
-    - id: m01-e02-t01
-      title: Extend Flyer API with Filter and Search Parameters
-      complete: false
-    - id: m01-e02-t02
-      title: Add Database Indexes for Efficient Filtering
-      complete: false
-    - id: m01-e02-t03
-      title: Create Category Filter UI Component
-      complete: false
-    - id: m01-e02-t04
-      title: Create Near Me Toggle Filter
-      complete: false
-    - id: m01-e02-t05
-      title: Create Search Bar with Debouncing
-      complete: false
-    - id: m01-e02-t06
-      title: Implement Filter State Management
-      complete: false
-    - id: m01-e02-t07
-      title: E2E Single Category Filter Selection
-      complete: false
-    - id: m01-e02-t08
-      title: E2E Multiple Category Filter Selection
-      complete: false
-    - id: m01-e02-t09
-      title: E2E Category Filter Deselection
-      complete: false
-    - id: m01-e02-t10
-      title: E2E Near Me Filter Toggle
-      complete: false
-    - id: m01-e02-t11
-      title: E2E Near Me Filter Deactivation
-      complete: false
-    - id: m01-e02-t12
-      title: E2E Near Me Filter Empty State
-      complete: false
-    - id: m01-e02-t13
-      title: E2E Search Real-Time Feed Update
-      complete: false
-    - id: m01-e02-t14
-      title: E2E Search Partial Word Match
-      complete: false
-    - id: m01-e02-t15
-      title: E2E Search No Results Empty State
-      complete: false
-    - id: m01-e02-t16
-      title: E2E Search Clear Restores Feed
-      complete: false
-    - id: m01-e02-t17
-      title: E2E Category Plus Near Me Combination
-      complete: false
-    - id: m01-e02-t18
-      title: E2E Category Plus Search Combination
-      complete: false
-    - id: m01-e02-t19
-      title: E2E Near Me Plus Search Combination
-      complete: false
-    - id: m01-e02-t20
-      title: E2E All Filters Combined
-      complete: false
-    - id: m01-e02-t21
-      title: E2E Filter State Persists During Session
-      complete: false
-    - id: m01-e02-t22
-      title: E2E Pull-To-Refresh Maintains Filters
-      complete: false
-    - id: m01-e02-t23
-      title: E2E Search With Special Characters
-      complete: false
-    - id: m01-e02-t24
-      title: E2E Search Debouncing Validation
-      complete: false
-  - id: m01-e03
-    title: User Views Flyer Details and Location
+    epics:
+      - id: m02-e01
+        title: User Registration and Login
+        complete: false
+        tasks: []
+      - id: m02-e02
+        title: User Profile Management
+        complete: false
+        tasks: []
+      - id: m02-e03
+        title: Privacy Settings and Email Permissions
+        complete: false
+        tasks: []
+      - id: m02-e04
+        title: E2E M02 Milestone Validation
+        complete: false
+        tasks: []
+  - id: m03
+    title: Authenticated Engagement - Favorites and Following
+    deliverable: Authenticated users can favorite flyers and follow creators to personalize their discovery experience. The "Favorites" and "Following" filters on the home screen become active, allowing users to view only their favorited flyers or flyers from creators they follow. Favorite and follow actions are integrated into flyer cards with real-time state updates. All engagement data is persisted in the backend with proper relationship models.
     complete: false
-    tasks: []
-  - id: m01-e04
-    title: User Views Creator Profiles
+    epics:
+      - id: m03-e01
+        title: Favorite Flyers
+        complete: false
+        tasks: []
+      - id: m03-e02
+        title: Follow Creators
+        complete: false
+        tasks: []
+      - id: m03-e03
+        title: Favorites and Following Feed Filters
+        complete: false
+        tasks: []
+      - id: m03-e04
+        title: End-to-End Milestone Validation
+        complete: false
+        tasks: []
+  - id: m04
+    title: Flyer Creation and Management
+    deliverable: Authenticated users can create, publish, edit, and delete their own digital flyers. The "Flyern" button in the header provides access to a complete flyer creation interface where users upload images (1-5 required), add text content, select category tags, input location (with backend geocoding), and set publication/expiration dates. Users can view their published flyers on their profile page, tap to edit any aspect, extend expiration dates with manual reactivation, and permanently delete flyers. All flyer data is persisted with image storage and geocoding integration.
     complete: false
-    tasks: []
-  - id: m01-e05
-    title: E2E Milestone Validation (No Mocks)
-    complete: false
-    tasks: []
-- id: m02
-  title: User Authentication and Profile Management
-  deliverable: Users can create accounts with email registration, log in securely,
-    and manage their public profile. The authentication system is fully integrated
-    with JWT-based security, and users can edit their profile picture and name. Registration
-    automatically creates an empty default profile. The header login button switches
-    to a profile avatar when authenticated, providing access to the user's own profile
-    page. All profile pages are publicly viewable by anyone, including anonymous users.
-  complete: false
-  epics:
-  - id: m02-e01
-    title: User Registration and Login
-    complete: false
-    tasks: []
-  - id: m02-e02
-    title: User Profile Management
-    complete: false
-    tasks: []
-  - id: m02-e03
-    title: Privacy Settings and Email Permissions
-    complete: false
-    tasks: []
-  - id: m02-e04
-    title: E2E M02 Milestone Validation
-    complete: false
-    tasks: []
-- id: m03
-  title: Authenticated Engagement - Favorites and Following
-  deliverable: Authenticated users can favorite flyers and follow creators to personalize
-    their discovery experience. The "Favorites" and "Following" filters on the home
-    screen become active, allowing users to view only their favorited flyers or flyers
-    from creators they follow. Favorite and follow actions are integrated into flyer
-    cards with real-time state updates. All engagement data is persisted in the backend
-    with proper relationship models.
-  complete: false
-  epics:
-  - id: m03-e01
-    title: Favorite Flyers
-    complete: false
-    tasks: []
-  - id: m03-e02
-    title: Follow Creators
-    complete: false
-    tasks: []
-  - id: m03-e03
-    title: Favorites and Following Feed Filters
-    complete: false
-    tasks: []
-  - id: m03-e04
-    title: End-to-End Milestone Validation
-    complete: false
-    tasks: []
-- id: m04
-  title: Flyer Creation and Management
-  deliverable: Authenticated users can create, publish, edit, and delete their own
-    digital flyers. The "Flyern" button in the header provides access to a complete
-    flyer creation interface where users upload images (1-5 required), add text content,
-    select category tags, input location (with backend geocoding), and set publication/expiration
-    dates. Users can view their published flyers on their profile page, tap to edit
-    any aspect, extend expiration dates with manual reactivation, and permanently
-    delete flyers. All flyer data is persisted with image storage and geocoding integration.
-  complete: false
-  epics:
-  - id: m04-e01
-    title: Create and Publish Flyers
-    complete: false
-    tasks: []
-  - id: m04-e02
-    title: View and Edit Own Flyers
-    complete: false
-    tasks: []
-  - id: m04-e03
-    title: Flyer Expiration and Deletion
-    complete: false
-    tasks: []
-  - id: m04-e04
-    title: E2E Milestone Validation
-    complete: false
-    tasks: []
+    epics:
+      - id: m04-e01
+        title: Create and Publish Flyers
+        complete: false
+        tasks: []
+      - id: m04-e02
+        title: View and Edit Own Flyers
+        complete: false
+        tasks: []
+      - id: m04-e03
+        title: Flyer Expiration and Deletion
+        complete: false
+        tasks: []
+      - id: m04-e04
+        title: E2E Milestone Validation
+        complete: false
+        tasks: []
