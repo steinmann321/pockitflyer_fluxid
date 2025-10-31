@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+"""
+TEMPLATE: Flutter/Dart Test Quality Checker
+
+This is an EXAMPLE template for Flutter/Dart projects.
+Rewrite this script to match your actual tech stack and test design rules.
+
+Purpose:
+- Enforce test design rules to prevent hanging/flaky tests
+- Check for anti-patterns in test code
+- Called by pre-commit hook on test files
+
+Usage:
+- Pre-commit framework passes test file paths via command line arguments
+- Script scans each file for violations using regex patterns
+- Returns exit code 1 if violations found, 0 if clean
+
+Tech Stack: Flutter/Dart (EXAMPLE - adapt for Python/JS/etc.)
+"""
+
+import re
+import sys
+from pathlib import Path
+
+
+# Define anti-patterns to detect
+# Key: regex pattern to search for
+# Value: error message to display
+PATTERNS = {
+    # Replace pumpAndSettle with explicit condition-based waiters.
+    r"\bpumpAndSettle\s*\(": "Avoid pumpAndSettle; use condition-based waiters.",
+    # Prefer Keys or semantics labels over text-based finders.
+    r"\bfind\.text\s*\(": "Prefer Keys/semantics over find.text.",
+    r"\bfind\.widgetWithText\s*\(": "Prefer Keys/semantics over widgetWithText.",
+    # Periodic timers can cause hangs/flakes.
+    r"\bTimer\.periodic\s*\(": "Avoid Timer.periodic in tests; disable/abstract in test mode.",
+    # Repeating animations can hang tests.
+    r"\bAnimationController\b[\s\S]*?\.repeat\s*\(": "Avoid AnimationController.repeat in tests; disable in test mode.",
+}
+
+
+def scan_file(path: Path) -> list[str]:
+    """Scan a single file for test design violations.
+
+    Args:
+        path: Path to test file
+
+    Returns:
+        List of violation messages with file:line format
+    """
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except Exception as exc:  # pragma: no cover
+        return [f"{path}: unable to read file: {exc}"]
+
+    issues: list[str] = []
+    for pattern, message in PATTERNS.items():
+        for m in re.finditer(pattern, text, flags=re.MULTILINE):
+            # Compute line number for match start
+            line = text.count("\n", 0, m.start()) + 1
+            issues.append(f"{path}:{line}: {message}")
+    return issues
+
+
+def main(argv: list[str]) -> int:
+    """Main entry point - called by pre-commit framework.
+
+    Args:
+        argv: List of file paths to check (passed by pre-commit)
+
+    Returns:
+        0 if all files clean, 1 if violations found
+    """
+    # argv is expected to be a list of file paths.
+    # When invoked directly via `python script.py file.dart`, pass sys.argv[1:].
+    # When invoked from pre-commit (`... "$@"`), argv already contains the files.
+    files = [Path(p) for p in argv]
+    if not files:
+        return 0  # nothing to check
+
+    all_issues: list[str] = []
+    for f in files:
+        if not f.exists():
+            continue
+        if f.suffix != ".dart":  # Adapt for your file extension (.py, .js, etc.)
+            continue
+        all_issues.extend(scan_file(f))
+
+    if all_issues:
+        # Print violation summary to stderr
+        sys.stderr.write(
+            "Pre-commit checklist to prevent hanging tests failed:\n"
+        )
+        sys.stderr.write(
+            "Follow the given mandatory Flutter test design rules and refactor the issues.\n"
+        )
+        sys.stderr.write(
+            "- Ensure animations are routed via AppDurations and zeroed in test mode.\n"
+        )
+        sys.stderr.write(
+            "- Avoid pumpAndSettle; use condition-based waiters.\n"
+        )
+        sys.stderr.write(
+            "- Prefer Keys/semantics labels over text-based finders.\n"
+        )
+        sys.stderr.write(
+            "- Disable periodic timers and repeating animations in test mode.\n\n"
+        )
+        hint = " Follow the given mandatory Flutter test design rules and refactor the issues."
+        for issue in all_issues:
+            sys.stderr.write(issue + hint + "\n")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

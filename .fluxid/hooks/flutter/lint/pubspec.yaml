@@ -1,0 +1,14 @@
+name: custom_lint_rules
+description: Custom lint rules for Flutter test quality
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  analyzer: ^6.0.0
+  custom_lint_builder: ^0.6.0
+
+dev_dependencies:
+  custom_lint: ^0.6.0

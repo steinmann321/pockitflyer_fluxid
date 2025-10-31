@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "claude-sonnet-4.5",
+  "small_model": "claude-3-haiku",
+  "provider": {
+    "anthropic": {
+      "options": {
+        "baseURL": "https://aikeys.maibornwolff.de",
+        "apiKey": "{env:ANTHROPIC_AUTH_TOKEN}"
+      },
+      "models": {
+        "claude-sonnet-4.5": {
+          "name": "Claude Sonnet 4.5"
+        },
+        "claude-3-haiku": {
+          "name": "Claude 3 Haiku"
+        }
+      }
+    }
+  }
+}

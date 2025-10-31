@@ -1,0 +1,80 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["config/**/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E","F","I","B","UP","C4","SIM","N"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"config/settings*.py" = ["F401"]
+"**/migrations/*" = ["E501"]
+
+[tool.black]
+line-length = 100
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+allow_untyped_globals = true
+plugins = []
+exclude = ".*/migrations/.*"
+
+
+[[tool.mypy.overrides]]
+module = [
+  "config.settings",
+  "users.models",
+]
+ignore_errors = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --disable-warnings --strict-markers --maxfail=1 --cov --cov-report=term-missing --cov-fail-under=90"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+DJANGO_SETTINGS_MODULE = "config.settings_test"
+markers = [
+  "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+  "integration: marks integration tests",
+  "unit: marks unit tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["config", "users"]
+omit = [
+  "*/migrations/*",
+  "*/tests/*",
+  "*/settings*.py",
+  "*/wsgi.py",
+  "*/asgi.py",
+  "manage.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 90
+
+[tool.tox]
+env_list = ["py311", "lint", "typecheck"]
+
+[tool.tox.testenv]
+setenv = { DJANGO_SETTINGS_MODULE = "pockitflyer_backend.settings_test" }
+deps = ["-rrequirements-dev.txt"]
+commands = ["pytest -q"]
+
+[tool.tox.env.lint]
+skip_install = true
+deps = ["ruff"]
+commands = ["ruff check ."]
+
+[tool.tox.env.typecheck]
+skip_install = true
+deps = ["mypy"]
+commands = ["mypy pockitflyer_backend users"]
