@@ -2,9 +2,9 @@
 id: m01-e01-t02
 epic: m01-e01
 title: Create Flyer Database Model
-status: pending
+status: completed
 priority: high
-tdd_phase: red
+tdd_phase: green
 ---
 
 # Task: Create Flyer Database Model
@@ -13,16 +13,16 @@ tdd_phase: red
 Create Django Flyer model with all fields required for flyer card display and smart ranking.
 
 ## Acceptance Criteria
-- [ ] Flyer model with fields: title, description, creator (FK to User), location_address, latitude, longitude
-- [ ] Image support: up to 5 images via separate FlyerImage model (1-to-many)
-- [ ] Validity fields: valid_from, valid_until (datetime fields)
-- [ ] Timestamps: created_at, updated_at
-- [ ] Computed field: is_valid (checks current datetime against validity period)
-- [ ] Proper indexing on: creator, latitude/longitude (for proximity queries), valid_from/valid_until, created_at
-- [ ] Database constraints: title max 200 chars, description max 2000 chars, address max 500 chars
-- [ ] Coordinate validation (lat: -90 to 90, lng: -180 to 180)
-- [ ] At least one image required (validated at model layer)
-- [ ] All tests marked with `@pytest.mark.tdd_green` after passing
+- [x] Flyer model with fields: title, description, creator (FK to User), location_address, latitude, longitude
+- [x] Image support: up to 5 images via separate FlyerImage model (1-to-many)
+- [x] Validity fields: valid_from, valid_until (datetime fields)
+- [x] Timestamps: created_at, updated_at
+- [x] Computed field: is_valid (checks current datetime against validity period)
+- [x] Proper indexing on: creator, latitude/longitude (for proximity queries), valid_from/valid_until, created_at
+- [x] Database constraints: title max 200 chars, description max 2000 chars, address max 500 chars
+- [x] Coordinate validation (lat: -90 to 90, lng: -180 to 180)
+- [x] At least one image required (validated at model layer)
+- [x] All tests marked with `@pytest.mark.tdd_green` after passing
 
 ## Test Coverage Requirements
 - Model field validation and constraints
