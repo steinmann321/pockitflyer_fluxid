@@ -1,6 +1,11 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'creator.dart';
 import 'flyer_image.dart';
 
+part 'flyer.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Flyer {
   Flyer({
     required this.id,
@@ -17,26 +22,7 @@ class Flyer {
     required this.isValid,
   });
 
-  factory Flyer.fromJson(Map<String, dynamic> json) {
-    return Flyer(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      creator: Creator.fromJson(json['creator'] as Map<String, dynamic>),
-      images: (json['images'] as List<dynamic>)
-          .map((e) => FlyerImage.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      locationAddress: json['location_address'] as String,
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      distanceKm: json['distance_km'] != null
-          ? (json['distance_km'] as num).toDouble()
-          : null,
-      validFrom: DateTime.parse(json['valid_from'] as String),
-      validUntil: DateTime.parse(json['valid_until'] as String),
-      isValid: json['is_valid'] as bool,
-    );
-  }
+  factory Flyer.fromJson(Map<String, dynamic> json) => _$FlyerFromJson(json);
 
   final int id;
   final String title;
@@ -51,22 +37,7 @@ class Flyer {
   final DateTime validUntil;
   final bool isValid;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'description': description,
-      'creator': creator.toJson(),
-      'images': images.map((e) => e.toJson()).toList(),
-      'location_address': locationAddress,
-      'latitude': latitude,
-      'longitude': longitude,
-      'distance_km': distanceKm,
-      'valid_from': validFrom.toIso8601String(),
-      'valid_until': validUntil.toIso8601String(),
-      'is_valid': isValid,
-    };
-  }
+  Map<String, dynamic> toJson() => _$FlyerToJson(this);
 
   @override
   bool operator ==(Object other) =>

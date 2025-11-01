@@ -1,25 +1,21 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'flyer_image.g.dart';
+
+@JsonSerializable()
 class FlyerImage {
   FlyerImage({
     required this.url,
     required this.order,
   });
 
-  factory FlyerImage.fromJson(Map<String, dynamic> json) {
-    return FlyerImage(
-      url: json['url'] as String,
-      order: json['order'] as int,
-    );
-  }
+  factory FlyerImage.fromJson(Map<String, dynamic> json) =>
+      _$FlyerImageFromJson(json);
 
   final String url;
   final int order;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'url': url,
-      'order': order,
-    };
-  }
+  Map<String, dynamic> toJson() => _$FlyerImageToJson(this);
 
   @override
   bool operator ==(Object other) =>

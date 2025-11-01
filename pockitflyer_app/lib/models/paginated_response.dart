@@ -1,5 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'flyer.dart';
 
+part 'paginated_response.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class PaginatedFeedResponse {
   PaginatedFeedResponse({
     required this.count,
@@ -8,30 +13,15 @@ class PaginatedFeedResponse {
     this.previous,
   });
 
-  factory PaginatedFeedResponse.fromJson(Map<String, dynamic> json) {
-    return PaginatedFeedResponse(
-      count: json['count'] as int,
-      next: json['next'] as String?,
-      previous: json['previous'] as String?,
-      results: (json['results'] as List<dynamic>)
-          .map((e) => Flyer.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory PaginatedFeedResponse.fromJson(Map<String, dynamic> json) =>
+      _$PaginatedFeedResponseFromJson(json);
 
   final int count;
   final String? next;
   final String? previous;
   final List<Flyer> results;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'count': count,
-      'next': next,
-      'previous': previous,
-      'results': results.map((e) => e.toJson()).toList(),
-    };
-  }
+  Map<String, dynamic> toJson() => _$PaginatedFeedResponseToJson(this);
 
   @override
   bool operator ==(Object other) =>

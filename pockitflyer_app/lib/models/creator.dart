@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'creator.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class Creator {
   Creator({
     required this.id,
@@ -5,25 +10,14 @@ class Creator {
     this.profilePictureUrl,
   });
 
-  factory Creator.fromJson(Map<String, dynamic> json) {
-    return Creator(
-      id: json['id'] as int,
-      username: json['username'] as String,
-      profilePictureUrl: json['profile_picture_url'] as String?,
-    );
-  }
+  factory Creator.fromJson(Map<String, dynamic> json) =>
+      _$CreatorFromJson(json);
 
   final int id;
   final String username;
   final String? profilePictureUrl;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'username': username,
-      'profile_picture_url': profilePictureUrl,
-    };
-  }
+  Map<String, dynamic> toJson() => _$CreatorToJson(this);
 
   @override
   bool operator ==(Object other) =>
