@@ -5,8 +5,6 @@ import 'package:mocktail_image_network/mocktail_image_network.dart';
 import 'package:pockitflyer_app/models/creator.dart';
 import 'package:pockitflyer_app/models/flyer.dart';
 import 'package:pockitflyer_app/models/flyer_image.dart';
-import 'package:pockitflyer_app/models/location.dart';
-import 'package:pockitflyer_app/models/validity.dart';
 import 'package:pockitflyer_app/widgets/flyer_card.dart';
 
 void main() {
@@ -21,22 +19,18 @@ void main() {
         creator: Creator(
           id: 1,
           username: 'testuser',
-          profilePicture: null,
+          profilePictureUrl: null,
         ),
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: '123 Test St, Test City',
-          lat: 37.7749,
-          lng: -122.4194,
-          distanceKm: 1.5,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: '123 Test St, Test City',
+        latitude: 37.7749,
+        longitude: -122.4194,
+        distanceKm: 1.5,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
     });
 
@@ -79,14 +73,15 @@ void main() {
         id: 1,
         title: 'Test',
         description: 'Desc',
-        creator: Creator(id: 1, username: 'user', profilePicture: ''),
+        creator: Creator(id: 1, username: 'user', profilePictureUrl: ''),
         images: [FlyerImage(url: 'img.jpg', order: 0)],
-        location: Location(address: 'Addr', lat: 0, lng: 0, distanceKm: 1.0),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Addr',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1.0,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -107,14 +102,15 @@ void main() {
         id: 1,
         title: 'Test',
         description: 'Desc',
-        creator: Creator(id: 1, username: 'alice', profilePicture: null),
+        creator: Creator(id: 1, username: 'alice', profilePictureUrl: null),
         images: [FlyerImage(url: 'img.jpg', order: 0)],
-        location: Location(address: 'Addr', lat: 0, lng: 0, distanceKm: 1.0),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Addr',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1.0,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -217,17 +213,13 @@ void main() {
         description: 'Test description',
         creator: Creator(id: 1, username: 'testuser'),
         images: [FlyerImage(url: 'https://example.com/image1.jpg', order: 0)],
-        location: Location(
-          address: '123 Test St',
-          lat: 37.7749,
-          lng: -122.4194,
-          distanceKm: 0.5,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: '123 Test St',
+        latitude: 37.7749,
+        longitude: -122.4194,
+        distanceKm: 0.5,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -319,17 +311,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -356,17 +344,13 @@ void main() {
           FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
           FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -392,17 +376,13 @@ void main() {
           FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
           FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -435,17 +415,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -473,17 +449,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://invalid-url.com/nonexistent.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -512,17 +484,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -549,17 +517,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -585,17 +549,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -631,17 +591,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -684,17 +640,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -723,17 +675,13 @@ void main() {
         images: [
           FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
         ],
-        location: Location(
-          address: 'Address',
-          lat: 0,
-          lng: 0,
-          distanceKm: 1,
-        ),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -758,14 +706,15 @@ void main() {
         id: 99,
         title: 'No Distance',
         description: 'Test',
-        creator: Creator(id: 1, username: 'user', profilePicture: null),
+        creator: Creator(id: 1, username: 'user', profilePictureUrl: null),
         images: [FlyerImage(url: 'test.jpg', order: 0)],
-        location: Location(address: 'Addr', lat: 0, lng: 0, distanceKm: null),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Addr',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: null,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -785,14 +734,15 @@ void main() {
         id: 100,
         title: 'Exactly 1km',
         description: 'Test',
-        creator: Creator(id: 1, username: 'user', profilePicture: null),
+        creator: Creator(id: 1, username: 'user', profilePictureUrl: null),
         images: [FlyerImage(url: 'test.jpg', order: 0)],
-        location: Location(address: 'Addr', lat: 0, lng: 0, distanceKm: 1.0),
-        validity: Validity(
-          validFrom: DateTime(2025, 1, 1),
-          validUntil: DateTime(2025, 12, 31),
-          isValid: true,
-        ),
+        locationAddress: 'Addr',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1.0,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
       );
 
       await tester.pumpWidget(
@@ -818,22 +768,18 @@ void main() {
           creator: Creator(
             id: 1,
             username: 'testuser',
-            profilePicture: null,
+            profilePictureUrl: null,
           ),
           images: [
             FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
           ],
-          location: Location(
-            address: '123 Test St, Test City',
-            lat: 37.7749,
-            lng: -122.4194,
-            distanceKm: 1.5,
-          ),
-          validity: Validity(
-            validFrom: DateTime(2025, 1, 1),
-            validUntil: DateTime(2025, 12, 31),
-            isValid: true,
-          ),
+          locationAddress: '123 Test St, Test City',
+          latitude: 37.7749,
+          longitude: -122.4194,
+          distanceKm: 1.5,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
         );
 
         tester.view.physicalSize = const Size(400, 600);
@@ -863,24 +809,20 @@ void main() {
           creator: Creator(
             id: 1,
             username: 'testuser',
-            profilePicture: null,
+            profilePictureUrl: null,
           ),
           images: [
             FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
             FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
             FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
           ],
-          location: Location(
-            address: '456 Multi St, Test City',
-            lat: 37.7749,
-            lng: -122.4194,
-            distanceKm: 2.3,
-          ),
-          validity: Validity(
-            validFrom: DateTime(2025, 1, 1),
-            validUntil: DateTime(2025, 12, 31),
-            isValid: true,
-          ),
+          locationAddress: '456 Multi St, Test City',
+          latitude: 37.7749,
+          longitude: -122.4194,
+          distanceKm: 2.3,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
         );
 
         tester.view.physicalSize = const Size(400, 600);
@@ -910,22 +852,18 @@ void main() {
           creator: Creator(
             id: 1,
             username: 'testuser',
-            profilePicture: null,
+            profilePictureUrl: null,
           ),
           images: [
             FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
           ],
-          location: Location(
-            address: '789 Long St, Test City',
-            lat: 37.7749,
-            lng: -122.4194,
-            distanceKm: 0.5,
-          ),
-          validity: Validity(
-            validFrom: DateTime(2025, 1, 1),
-            validUntil: DateTime(2025, 12, 31),
-            isValid: true,
-          ),
+          locationAddress: '789 Long St, Test City',
+          latitude: 37.7749,
+          longitude: -122.4194,
+          distanceKm: 0.5,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
         );
 
         tester.view.physicalSize = const Size(400, 600);

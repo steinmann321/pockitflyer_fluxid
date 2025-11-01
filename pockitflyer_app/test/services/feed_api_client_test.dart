@@ -30,22 +30,18 @@ void main() {
             'creator': {
               'id': 1,
               'username': 'user1',
-              'profile_picture': null,
+              'profile_picture_url': null,
             },
             'images': [
               {'url': 'http://example.com/image1.jpg', 'order': 0},
             ],
-            'location': {
-              'address': '123 Main St',
-              'lat': 47.5,
-              'lng': 8.5,
-              'distance_km': 1.2,
-            },
-            'validity': {
-              'valid_from': '2024-01-01T00:00:00Z',
-              'valid_until': '2024-12-31T23:59:59Z',
-              'is_valid': true,
-            },
+            'location_address': '123 Main St',
+            'latitude': 47.5,
+            'longitude': 8.5,
+            'distance_km': 1.2,
+            'valid_from': '2024-01-01T00:00:00Z',
+            'valid_until': '2024-12-31T23:59:59Z',
+            'is_valid': true,
           },
           {
             'id': 2,
@@ -54,22 +50,18 @@ void main() {
             'creator': {
               'id': 2,
               'username': 'user2',
-              'profile_picture': null,
+              'profile_picture_url': null,
             },
             'images': [
               {'url': 'http://example.com/image2.jpg', 'order': 0},
             ],
-            'location': {
-              'address': '456 Oak Ave',
-              'lat': 47.6,
-              'lng': 8.6,
-              'distance_km': 2.5,
-            },
-            'validity': {
-              'valid_from': '2024-01-01T00:00:00Z',
-              'valid_until': '2024-12-31T23:59:59Z',
-              'is_valid': true,
-            },
+            'location_address': '456 Oak Ave',
+            'latitude': 47.6,
+            'longitude': 8.6,
+            'distance_km': 2.5,
+            'valid_from': '2024-01-01T00:00:00Z',
+            'valid_until': '2024-12-31T23:59:59Z',
+            'is_valid': true,
           },
         ],
       };
@@ -240,6 +232,119 @@ void main() {
       expect(
         () => client.getFeed(lat: 47.5, lng: 8.5),
         throwsA(isA<NetworkException>()),
+      );
+    }, tags: ['tdd_green']);
+
+    test('getFeed throws TimeoutException on receiveTimeout', () async {
+      when(() => mockDio.get<Map<String, dynamic>>(
+            any(),
+            queryParameters: any(named: 'queryParameters'),
+          )).thenThrow(
+        DioException(
+          type: DioExceptionType.receiveTimeout,
+          requestOptions: RequestOptions(path: '/api/feed/'),
+        ),
+      );
+
+      expect(
+        () => client.getFeed(lat: 47.5, lng: 8.5),
+        throwsA(isA<TimeoutException>()),
+      );
+    }, tags: ['tdd_green']);
+
+    test('getFeed throws TimeoutException on sendTimeout', () async {
+      when(() => mockDio.get<Map<String, dynamic>>(
+            any(),
+            queryParameters: any(named: 'queryParameters'),
+          )).thenThrow(
+        DioException(
+          type: DioExceptionType.sendTimeout,
+          requestOptions: RequestOptions(path: '/api/feed/'),
+        ),
+      );
+
+      expect(
+        () => client.getFeed(lat: 47.5, lng: 8.5),
+        throwsA(isA<TimeoutException>()),
+      );
+    }, tags: ['tdd_green']);
+
+    test('getFeed throws ServerException when response data is null', () async {
+      when(() => mockDio.get<Map<String, dynamic>>(
+            any(),
+            queryParameters: any(named: 'queryParameters'),
+          )).thenAnswer(
+        (_) async => Response(
+          data: null,
+          statusCode: 200,
+          requestOptions: RequestOptions(path: '/api/feed/'),
+        ),
+      );
+
+      expect(
+        () => client.getFeed(lat: 47.5, lng: 8.5),
+        throwsA(
+          isA<ServerException>()
+              .having((e) => e.message, 'message', 'Empty response from server'),
+        ),
+      );
+    }, tags: ['tdd_green']);
+
+    test('getFeed throws ServerException with default message when error field missing', () async {
+      when(() => mockDio.get<Map<String, dynamic>>(
+            any(),
+            queryParameters: any(named: 'queryParameters'),
+          )).thenThrow(
+        DioException(
+          type: DioExceptionType.badResponse,
+          response: Response(
+            statusCode: 404,
+            data: {'message': 'Not found'},
+            requestOptions: RequestOptions(path: '/api/feed/'),
+          ),
+          requestOptions: RequestOptions(path: '/api/feed/'),
+        ),
+      );
+
+      expect(
+        () => client.getFeed(lat: 47.5, lng: 8.5),
+        throwsA(isA<ServerException>()),
+      );
+    }, tags: ['tdd_green']);
+
+    test('getFeed throws ServerException when response data is not a Map', () async {
+      when(() => mockDio.get<Map<String, dynamic>>(
+            any(),
+            queryParameters: any(named: 'queryParameters'),
+          )).thenThrow(
+        DioException(
+          type: DioExceptionType.badResponse,
+          response: Response(
+            statusCode: 500,
+            data: 'Internal Server Error',
+            requestOptions: RequestOptions(path: '/api/feed/'),
+          ),
+          requestOptions: RequestOptions(path: '/api/feed/'),
+        ),
+      );
+
+      expect(
+        () => client.getFeed(lat: 47.5, lng: 8.5),
+        throwsA(isA<ServerException>()),
+      );
+    }, tags: ['tdd_green']);
+
+    test('getFeed throws ApiException on unexpected error', () async {
+      when(() => mockDio.get<Map<String, dynamic>>(
+            any(),
+            queryParameters: any(named: 'queryParameters'),
+          )).thenThrow(
+        Exception('Unexpected error'),
+      );
+
+      expect(
+        () => client.getFeed(lat: 47.5, lng: 8.5),
+        throwsA(isA<ApiException>()),
       );
     }, tags: ['tdd_green']);
   });

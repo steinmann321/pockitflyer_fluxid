@@ -2,26 +2,26 @@ class Creator {
   Creator({
     required this.id,
     required this.username,
-    this.profilePicture,
+    this.profilePictureUrl,
   });
 
   factory Creator.fromJson(Map<String, dynamic> json) {
     return Creator(
       id: json['id'] as int,
       username: json['username'] as String,
-      profilePicture: json['profile_picture'] as String?,
+      profilePictureUrl: json['profile_picture_url'] as String?,
     );
   }
 
   final int id;
   final String username;
-  final String? profilePicture;
+  final String? profilePictureUrl;
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'username': username,
-      'profile_picture': profilePicture,
+      'profile_picture_url': profilePictureUrl,
     };
   }
 
@@ -32,8 +32,8 @@ class Creator {
           runtimeType == other.runtimeType &&
           id == other.id &&
           username == other.username &&
-          profilePicture == other.profilePicture;
+          profilePictureUrl == other.profilePictureUrl;
 
   @override
-  int get hashCode => Object.hash(id, username, profilePicture);
+  int get hashCode => Object.hash(id, username, profilePictureUrl);
 }

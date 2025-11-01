@@ -41,6 +41,8 @@ class FeedApiClient {
       }
 
       return PaginatedFeedResponse.fromJson(response.data!);
+    } on ApiException {
+      rethrow;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||

@@ -1,7 +1,5 @@
 import 'creator.dart';
 import 'flyer_image.dart';
-import 'location.dart';
-import 'validity.dart';
 
 class Flyer {
   Flyer({
@@ -10,8 +8,13 @@ class Flyer {
     required this.description,
     required this.creator,
     required this.images,
-    required this.location,
-    required this.validity,
+    required this.locationAddress,
+    required this.latitude,
+    required this.longitude,
+    this.distanceKm,
+    required this.validFrom,
+    required this.validUntil,
+    required this.isValid,
   });
 
   factory Flyer.fromJson(Map<String, dynamic> json) {
@@ -23,8 +26,15 @@ class Flyer {
       images: (json['images'] as List<dynamic>)
           .map((e) => FlyerImage.fromJson(e as Map<String, dynamic>))
           .toList(),
-      location: Location.fromJson(json['location'] as Map<String, dynamic>),
-      validity: Validity.fromJson(json['validity'] as Map<String, dynamic>),
+      locationAddress: json['location_address'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      distanceKm: json['distance_km'] != null
+          ? (json['distance_km'] as num).toDouble()
+          : null,
+      validFrom: DateTime.parse(json['valid_from'] as String),
+      validUntil: DateTime.parse(json['valid_until'] as String),
+      isValid: json['is_valid'] as bool,
     );
   }
 
@@ -33,8 +43,13 @@ class Flyer {
   final String description;
   final Creator creator;
   final List<FlyerImage> images;
-  final Location location;
-  final Validity validity;
+  final String locationAddress;
+  final double latitude;
+  final double longitude;
+  final double? distanceKm;
+  final DateTime validFrom;
+  final DateTime validUntil;
+  final bool isValid;
 
   Map<String, dynamic> toJson() {
     return {
@@ -43,8 +58,13 @@ class Flyer {
       'description': description,
       'creator': creator.toJson(),
       'images': images.map((e) => e.toJson()).toList(),
-      'location': location.toJson(),
-      'validity': validity.toJson(),
+      'location_address': locationAddress,
+      'latitude': latitude,
+      'longitude': longitude,
+      'distance_km': distanceKm,
+      'valid_from': validFrom.toIso8601String(),
+      'valid_until': validUntil.toIso8601String(),
+      'is_valid': isValid,
     };
   }
 
@@ -58,8 +78,13 @@ class Flyer {
           description == other.description &&
           creator == other.creator &&
           images.length == other.images.length &&
-          location == other.location &&
-          validity == other.validity;
+          locationAddress == other.locationAddress &&
+          latitude == other.latitude &&
+          longitude == other.longitude &&
+          distanceKm == other.distanceKm &&
+          validFrom == other.validFrom &&
+          validUntil == other.validUntil &&
+          isValid == other.isValid;
 
   @override
   int get hashCode => Object.hash(
@@ -68,7 +93,12 @@ class Flyer {
         description,
         creator,
         Object.hashAll(images),
-        location,
-        validity,
+        locationAddress,
+        latitude,
+        longitude,
+        distanceKm,
+        validFrom,
+        validUntil,
+        isValid,
       );
 }

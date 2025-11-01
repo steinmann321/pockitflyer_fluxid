@@ -2,9 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pockitflyer_app/models/creator.dart';
 import 'package:pockitflyer_app/models/flyer.dart';
 import 'package:pockitflyer_app/models/flyer_image.dart';
-import 'package:pockitflyer_app/models/location.dart';
 import 'package:pockitflyer_app/models/paginated_response.dart';
-import 'package:pockitflyer_app/models/validity.dart';
 
 void main() {
   group('PaginatedFeedResponse', () {
@@ -21,22 +19,18 @@ void main() {
             'creator': {
               'id': 1,
               'username': 'testuser',
-              'profile_picture': null,
+              'profile_picture_url': null,
             },
             'images': [
               {'url': 'http://example.com/image.jpg', 'order': 0},
             ],
-            'location': {
-              'address': '123 Test St',
-              'lat': 47.5,
-              'lng': 8.5,
-              'distance_km': 1.5,
-            },
-            'validity': {
-              'valid_from': '2024-01-01T00:00:00Z',
-              'valid_until': '2024-12-31T23:59:59Z',
-              'is_valid': true,
-            },
+            'location_address': '123 Test St',
+            'latitude': 47.5,
+            'longitude': 8.5,
+            'distance_km': 1.5,
+            'valid_from': '2024-01-01T00:00:00Z',
+            'valid_until': '2024-12-31T23:59:59Z',
+            'is_valid': true,
           },
         ],
       };
@@ -93,17 +87,13 @@ void main() {
         images: [
           FlyerImage(url: 'http://example.com/image.jpg', order: 0),
         ],
-        location: Location(
-          address: '123 Test St',
-          lat: 47.5,
-          lng: 8.5,
-          distanceKm: 1.5,
-        ),
-        validity: Validity(
-          validFrom: DateTime.parse('2024-01-01T00:00:00Z'),
-          validUntil: DateTime.parse('2024-12-31T23:59:59Z'),
-          isValid: true,
-        ),
+        locationAddress: '123 Test St',
+        latitude: 47.5,
+        longitude: 8.5,
+        distanceKm: 1.5,
+        validFrom: DateTime.parse('2024-01-01T00:00:00Z'),
+        validUntil: DateTime.parse('2024-12-31T23:59:59Z'),
+        isValid: true,
       );
 
       final response = PaginatedFeedResponse(
@@ -129,12 +119,12 @@ void main() {
         description: 'Desc',
         creator: Creator(id: 1, username: 'user'),
         images: [],
-        location: Location(address: 'addr', lat: 1.0, lng: 1.0),
-        validity: Validity(
-          validFrom: DateTime.parse('2024-01-01T00:00:00Z'),
-          validUntil: DateTime.parse('2024-12-31T23:59:59Z'),
-          isValid: true,
-        ),
+        locationAddress: 'addr',
+        latitude: 1.0,
+        longitude: 1.0,
+        validFrom: DateTime.parse('2024-01-01T00:00:00Z'),
+        validUntil: DateTime.parse('2024-12-31T23:59:59Z'),
+        isValid: true,
       );
 
       final response1 = PaginatedFeedResponse(

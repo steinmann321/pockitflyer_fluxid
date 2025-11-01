@@ -67,13 +67,13 @@ class _FlyerCardState extends State<FlyerCard> {
   }
 
   Widget _buildAvatar() {
-    final profilePicture = widget.flyer.creator.profilePicture;
-    final hasProfilePicture = profilePicture != null && profilePicture.isNotEmpty;
+    final profilePictureUrl = widget.flyer.creator.profilePictureUrl;
+    final hasProfilePicture = profilePictureUrl != null && profilePictureUrl.isNotEmpty;
 
     return CircleAvatar(
       key: const Key('creator_avatar'),
       radius: 16,
-      backgroundImage: hasProfilePicture ? NetworkImage(profilePicture) : null,
+      backgroundImage: hasProfilePicture ? NetworkImage(profilePictureUrl) : null,
       backgroundColor: hasProfilePicture ? null : _getAvatarColor(),
       child: hasProfilePicture
           ? null
@@ -285,7 +285,7 @@ class _FlyerCardState extends State<FlyerCard> {
         const SizedBox(width: 4),
         Expanded(
           child: Text(
-            widget.flyer.location.address,
+            widget.flyer.locationAddress,
             key: const Key('location_address'),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -296,9 +296,9 @@ class _FlyerCardState extends State<FlyerCard> {
           ),
         ),
         const SizedBox(width: 8),
-        if (widget.flyer.location.distanceKm != null)
+        if (widget.flyer.distanceKm != null)
           Text(
-            _formatDistance(widget.flyer.location.distanceKm!),
+            _formatDistance(widget.flyer.distanceKm!),
             key: const Key('location_distance'),
             style: const TextStyle(
               fontSize: 12,
@@ -325,7 +325,7 @@ class _FlyerCardState extends State<FlyerCard> {
         const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
         const SizedBox(width: 4),
         Text(
-          'Valid until ${dateFormat.format(widget.flyer.validity.validUntil)}',
+          'Valid until ${dateFormat.format(widget.flyer.validUntil)}',
           key: const Key('validity_text'),
           style: const TextStyle(
             fontSize: 12,
