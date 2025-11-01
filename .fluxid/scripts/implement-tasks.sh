@@ -238,6 +238,17 @@ check_epic_completion() {
                 fi
             fi
 
+            # Create snapshot branch after all validations pass
+            echo ""
+            log_info "Creating epic snapshot branch..."
+            if create_epic_snapshot_branch; then
+                echo ""
+                log_success "Epic snapshot created successfully"
+            else
+                echo ""
+                log_warning "Failed to create snapshot branch, but continuing..."
+            fi
+
             echo ""
             echo "$epic_id"
             return 0

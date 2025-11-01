@@ -191,3 +191,31 @@ verify_push_success() {
 
     return 0
 }
+
+# Create snapshot branch after epic completion
+# Creates a branch named: <current-branch>-snapshot-YYYYMMDD-HHMMSS
+# Args: none (uses current branch)
+# Returns: 0 on success, 1 on error
+create_epic_snapshot_branch() {
+    local current_branch=$(get_current_branch)
+
+    if [ -z "$current_branch" ]; then
+        log_error "Not on a branch (detached HEAD?)"
+        return 1
+    fi
+
+    # Generate timestamp in format: YYYYMMDD-HHMMSS
+    local timestamp=$(date +"%Y%m%d-%H%M%S")
+    local snapshot_branch="${current_branch}-snapshot-${timestamp}"
+
+    log_info "Creating snapshot branch: $snapshot_branch"
+
+    # Create the snapshot branch (just creates the ref, doesn't switch to it)
+    if git branch "$snapshot_branch" 2>/dev/null; then
+        log_success "Snapshot branch created: $snapshot_branch"
+        return 0
+    else
+        log_error "Failed to create snapshot branch: $snapshot_branch"
+        return 1
+    fi
+}
