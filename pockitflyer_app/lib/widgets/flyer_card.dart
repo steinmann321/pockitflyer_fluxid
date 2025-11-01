@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,23 +19,29 @@ class FlyerCard extends StatefulWidget {
 
 class _FlyerCardState extends State<FlyerCard> {
   int _currentImageIndex = 0;
+  bool _isDescriptionExpanded = false;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      key: widget.key,
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCreatorHeader(),
-          _buildImageCarousel(),
-          _buildCardContent(),
-        ],
+    return GestureDetector(key: const Key('card_tap_detector'),
+      onTap: () {
+        // TODO(M01-E03): Navigate to flyer detail screen
+      },
+      child: Card(
+        key: widget.key,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildCreatorHeader(),
+            _buildImageCarousel(),
+            _buildCardContent(),
+          ],
+        ),
       ),
     );
   }
@@ -208,16 +216,7 @@ class _FlyerCardState extends State<FlyerCard> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            widget.flyer.description,
-            key: const Key('flyer_description'),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
-            ),
-          ),
+          _buildDescription(),
           const SizedBox(height: 12),
           _buildLocationInfo(),
           const SizedBox(height: 8),
@@ -225,6 +224,58 @@ class _FlyerCardState extends State<FlyerCard> {
         ],
       ),
     );
+  }
+
+  Widget _buildDescription() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final shouldShowLink = _shouldShowMoreLink(constraints.maxWidth);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.flyer.description,
+              key: const Key('flyer_description'),
+              maxLines: _isDescriptionExpanded ? null : 4,
+              overflow: _isDescriptionExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+              ),
+            ),
+            if (shouldShowLink)
+              GestureDetector(key: const Key('show_more_link'),
+                onTap: () {
+                  setState(() {
+                    _isDescriptionExpanded = !_isDescriptionExpanded;
+                  });
+                },
+                child: Text(
+                  _isDescriptionExpanded ? 'Show less' : 'Show more',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  bool _shouldShowMoreLink(double maxWidth) {
+    final textSpan = TextSpan(
+      text: widget.flyer.description,
+      style: const TextStyle(fontSize: 14),
+    );
+    final textPainter = TextPainter(
+      text: textSpan,
+      maxLines: 4,
+      textDirection: ui.TextDirection.ltr,
+    )..layout(maxWidth: maxWidth);
+    return textPainter.didExceedMaxLines;
   }
 
   Widget _buildLocationInfo() {

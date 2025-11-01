@@ -57,11 +57,13 @@ YOU set up backend. User will NOT.
 
 ## Test Organization
 
-**Pyramid**: Many unit (fast, isolated) > fewer integration (moderate) > minimal E2E (slow, critical, YOU run with backend)
+**Pyramid**: Unit tests > Widget tests > fewer integration (with mocks)
 
-**Coverage**: Unit 90%+, integration 100%, E2E critical flows only
+**E2E**: There are supposed to be much more E2E tests in this project as usual - This is by design
 
-**Distribution**: 1/3 happy, 2/3 unhappy (adjust by risk)
+**Coverage**: Unit 90%+, integration 100%, E2E covers user flows
+
+**Distribution**: 1/3 happy, 2/3 unhappy
 
 ## DO / DON'T
 
