@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Lint: TabController with hardcoded animation duration
+# Detects literal Duration in TabController.animateTo
+
+PROJECT_ROOT="$(git rev-parse --show-toplevel)"
+APP_DIR="${PROJECT_ROOT}/${APP_DIR_REL}"
+
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+FAILED=0
+
+APP_DIR_NAME=$(basename "$APP_DIR")
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' | grep -E "^${APP_DIR_NAME}/lib/" || true)
+
+if [ -z "$STAGED_FILES" ]; then
+    exit 0
+fi
+
+echo -e "${YELLOW}  Checking for TabController.animateTo with hardcoded duration...${NC}"
+
+for file in $STAGED_FILES; do
+    # Check for TabController.animateTo with duration: Duration(
+    # This is tricky because animateTo might be on ScrollController too
+    # We'll look for context clues or just flag all animateTo that aren't covered by rule 20
+    # For safety, check if line contains "tab" (case insensitive) near animateTo
+    if grep -nE "\.animateTo\([^)]*duration:\s*Duration\(" "$file" | grep -iE "tab" > /dev/null 2>&1; then
+        line_nums=$(grep -nE "\.animateTo\([^)]*duration:\s*Duration\(" "$file" | grep -iE "tab" | cut -d: -f1 | head -5)
+        echo -e "${RED}  ✗ ${file}${NC}"
+        echo -e "    TabController.animateTo with hardcoded Duration at line(s): ${line_nums}"
+        echo -e "    ${YELLOW}Use TimingConfig.tabTransitionDuration instead${NC}"
+        FAILED=1
+    fi
+done
+
+if [ $FAILED -eq 1 ]; then
+    echo ""
+    echo -e "${RED}  TabController with hardcoded duration detected${NC}"
+    echo -e "${YELLOW}  Why: Makes tab animation tests flaky, durations should be configurable${NC}"
+    exit 1
+fi
+
+exit 0

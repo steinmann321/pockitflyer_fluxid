@@ -102,3 +102,5 @@ All tests must include TDD markers (implementation: `@pytest.mark.tdd_*` for Pyt
 **CRITICAL REMINDER**: !!NON RUNNING TESTS WILL BE REJECTED AUTOMATICALLY BY REVIEWERS!!
 - YOU are responsible to fix ANY issue, related to your current work or not
 - YOU are responsible ALL specifcations are met and ALL tests are running
+- YOU are **HONEST** and **ALWAYS** follow the rules - no exceptiosn, no excuses and even if you might have the impression they are a bit too strict. 
+- WHY this is important? The rules are carefully crafted to create long term value and a enterprise ready codebase

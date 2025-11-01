@@ -1,8 +1,57 @@
-# Maestro Hooks Setup Script
+# Flutter Linting Setup Scripts
 
-## What It Does
+This directory contains three setup scripts for enforcing Flutter code quality through Git pre-commit hooks.
 
-The `maestro-hooks-setup.sh` script installs Git pre-commit hooks that enforce code quality rules designed to make Maestro e2e tests more reliable and maintainable.
+## Available Scripts
+
+### 1. `maestro-hooks-setup.sh` - Maestro Testability Rules
+
+Installs hooks that enforce code quality rules designed to make Maestro e2e tests more reliable and maintainable.
+
+**Rules:** 8 rules (01-08) focused on test identifiers, validation, error handling, etc.
+
+### 2. `setup-general-linting-rules.sh` - Test Quality Rules
+
+Installs hooks that prevent flaky test patterns in widget tests.
+
+**Rules:** 4 rules (10-13) focused on avoiding `pumpAndSettle`, NetworkImage, etc.
+
+### 3. `setup-timing-linting-rules.sh` - Timing/Duration Enforcement ⭐ NEW
+
+Installs hooks that enforce ALL timing and duration configurations through `TimingConfig`.
+
+**Rules:** 11 rules (14-24) covering AnimationController, PageController, ScrollController, Timer, Future.delayed, and more.
+
+**Key Benefit:** Zero durations in widget tests, production durations in Maestro E2E tests.
+
+---
+
+## Quick Start
+
+```bash
+# Install all three rule sets
+cd .fluxid/scripts
+
+# 1. Maestro testability rules
+./maestro-hooks-setup.sh
+
+# 2. Test quality rules
+./setup-general-linting-rules.sh
+
+# 3. Timing enforcement rules (recommended!)
+./setup-timing-linting-rules.sh
+```
+
+---
+
+## Timing Rules Script (Detailed)
+
+### What It Does
+
+The `setup-timing-linting-rules.sh` script enforces that **all timing/duration values** come from a centralized `TimingConfig` class, ensuring:
+- ✅ **Zero durations in widget tests** → fast, deterministic tests
+- ✅ **Production durations in Maestro E2E** → realistic user experience testing
+- ✅ **No flaky animation/timing tests** → consistent CI/CD
 
 ## Usage
 
@@ -239,8 +288,69 @@ By enforcing at commit time, tests become:
 - ✅ Easy to maintain
 - ✅ Comprehensive coverage
 
+---
+
+## Timing Rules Coverage (Rules 14-24)
+
+| Rule | File | Enforces | Config Property |
+|------|------|----------|-----------------|
+| 14 | `14_direct_timing_operation.sh` | Timer/Future.delayed in services only | service-specific |
+| 15 | `15_third_party_timing_operation.sh` | No rxdart/async timing in business logic | N/A |
+| 16 | `16_hardcoded_timing_duration.sh` | No hardcoded Duration in timers | timingConfig.* |
+| 17 | `17_animation_without_config.sh` | Animated* widgets use config | animationDuration |
+| 18 | `18_animation_controller_duration.sh` | AnimationController uses config | animationDuration, reverseAnimationDuration |
+| 19 | `19_page_controller_duration.sh` | PageController uses config | pageTransitionDuration |
+| 20 | `20_scroll_controller_duration.sh` | ScrollController uses config | scrollAnimationDuration |
+| 21 | `21_image_fade_duration.sh` | FadeInImage uses config | imageFadeInDuration, imageFadeOutDuration |
+| 22 | `22_dismissible_duration.sh` | Dismissible uses config | dismissibleMovementDuration, dismissibleResizeDuration |
+| 23 | `23_tween_animation_builder_duration.sh` | TweenAnimationBuilder uses config | tweenAnimationDuration |
+| 24 | `24_tab_controller_duration.sh` | TabController uses config | tabTransitionDuration |
+
+**Total:** 11 timing-related rules ensuring zero flaky animation tests!
+
+---
+
+## Implementation Guide
+
+After running `setup-timing-linting-rules.sh`:
+
+1. **Create TimingConfig class** at `lib/config/timing_config.dart`:
+   ```dart
+   class TimingConfig {
+     final Duration animationDuration;
+     final Duration pageTransitionDuration;
+     // ... see TIMING_CONFIG_REFERENCE.md for complete list
+
+     const TimingConfig.test() : animationDuration = Duration.zero, ...;
+     const TimingConfig.production() : animationDuration = const Duration(milliseconds: 300), ...;
+   }
+   ```
+
+2. **Inject via Provider** (recommended):
+   ```dart
+   // main.dart
+   runApp(
+     Provider<TimingConfig>(
+       create: (_) => TimingConfig.production(),
+       child: MyApp(),
+     ),
+   );
+
+   // tests
+   Provider<TimingConfig>(
+     create: (_) => TimingConfig.test(),
+     child: MyApp(),
+   );
+   ```
+
+3. **Reference documentation**: `.fluxid/hooks/flutter/TIMING_CONFIG_REFERENCE.md`
+
+---
+
 ## More Info
 
-- Full documentation: `.fluxid/hooks/flutter/README.md`
+- **Maestro rules**: `.fluxid/hooks/flutter/README.md`
+- **Test quality rules**: `.fluxid/hooks/flutter/TEST_QUALITY_RULES.md`
+- **Timing rules**: `.fluxid/hooks/flutter/GENERAL_LINT_RULES.md`
+- **TimingConfig reference**: `.fluxid/hooks/flutter/TIMING_CONFIG_REFERENCE.md`
 - Quick reference: `.fluxid/hooks/QUICKSTART.md`
-- Rule details: See individual `0[1-8]_*.sh` scripts

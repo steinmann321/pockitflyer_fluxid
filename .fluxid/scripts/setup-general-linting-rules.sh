@@ -334,246 +334,18 @@ LINT_EOF
 
 chmod +x "${HOOKS_DIR}/13_avoid_await_future_constructor.sh"
 
-# 5. Detect direct timing operations (Timer, Future.delayed) in business logic
-cat > "${HOOKS_DIR}/14_direct_timing_operation.sh" << 'LINT_EOF'
-#!/bin/bash
+# Note: Timing-related rules (14-24) are now managed by setup-timing-linting-rules.sh
+# Run that script separately to install timing enforcement rules
 
-# Lint: Direct timing operations in business logic
-# Detects Timer, Future.delayed, Stream.periodic in non-service production code
+# Create README for test quality rules only
+cat > "${HOOKS_DIR}/TEST_QUALITY_RULES.md" << 'README_EOF'
+# Test Quality Rules for Flutter
 
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-APP_DIR="${PROJECT_ROOT}/${APP_DIR_REL}"
-
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-FAILED=0
-
-APP_DIR_NAME=$(basename "$APP_DIR")
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' | grep -E "^${APP_DIR_NAME}/lib/" || true)
-
-if [ -z "$STAGED_FILES" ]; then
-    exit 0
-fi
-
-echo -e "${YELLOW}  Checking for direct timing operations...${NC}"
-
-# Exempt service files (contain keywords: service, timer, timing, debounce, throttle)
-SERVICE_KEYWORDS="service|timer|timing|debounce|throttle|scheduler|delay"
-
-for file in $STAGED_FILES; do
-    # Skip if file is a timing service
-    if echo "$file" | grep -iE "$SERVICE_KEYWORDS" > /dev/null 2>&1; then
-        continue
-    fi
-
-    # Skip if file has timing-allowed comment
-    if grep -q "// timing-allowed\|// lint:allow-timing" "$file" 2>/dev/null; then
-        continue
-    fi
-
-    # Check for Timer, Future.delayed, Stream.periodic
-    if grep -nE "Timer\(|Timer\.periodic|Future\.delayed|Stream\.periodic" "$file" > /dev/null 2>&1; then
-        line_nums=$(grep -nE "Timer\(|Timer\.periodic|Future\.delayed|Stream\.periodic" "$file" | cut -d: -f1 | head -5)
-        echo -e "${RED}  ✗ ${file}${NC}"
-        echo -e "    Direct timing operation at line(s): ${line_nums}"
-        echo -e "    ${YELLOW}Encapsulate in a service class instead${NC}"
-        echo -e "    ${YELLOW}Or add: // timing-allowed${NC}"
-        FAILED=1
-    fi
-done
-
-if [ $FAILED -eq 1 ]; then
-    echo ""
-    echo -e "${RED}  Direct timing operations detected${NC}"
-    echo -e "${YELLOW}  Why: Hard to test, violates SRP, causes flaky tests${NC}"
-    exit 1
-fi
-
-exit 0
-LINT_EOF
-
-chmod +x "${HOOKS_DIR}/14_direct_timing_operation.sh"
-
-# 6. Detect third-party timing operations
-cat > "${HOOKS_DIR}/15_third_party_timing_operation.sh" << 'LINT_EOF'
-#!/bin/bash
-
-# Lint: Third-party timing operations
-# Detects rxdart, async, quiver timing utilities in non-service code
-
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-APP_DIR="${PROJECT_ROOT}/${APP_DIR_REL}"
-
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-FAILED=0
-
-APP_DIR_NAME=$(basename "$APP_DIR")
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' | grep -E "^${APP_DIR_NAME}/lib/" || true)
-
-if [ -z "$STAGED_FILES" ]; then
-    exit 0
-fi
-
-echo -e "${YELLOW}  Checking for third-party timing operations...${NC}"
-
-SERVICE_KEYWORDS="service|timer|timing|debounce|throttle|scheduler"
-
-for file in $STAGED_FILES; do
-    # Skip service files
-    if echo "$file" | grep -iE "$SERVICE_KEYWORDS" > /dev/null 2>&1; then
-        continue
-    fi
-
-    if grep -q "// timing-allowed" "$file" 2>/dev/null; then
-        continue
-    fi
-
-    # Check for third-party timing imports
-    has_timing_import=false
-    if grep -E "import 'package:rxdart|import 'package:async|import 'package:quiver" "$file" > /dev/null 2>&1; then
-        has_timing_import=true
-    fi
-
-    if [ "$has_timing_import" = true ]; then
-        # Check for timing methods
-        if grep -nE "debounceTime|throttleTime|interval|RestartableTimer|Metronome" "$file" > /dev/null 2>&1; then
-            line_nums=$(grep -nE "debounceTime|throttleTime|interval|RestartableTimer|Metronome" "$file" | cut -d: -f1 | head -5)
-            echo -e "${RED}  ✗ ${file}${NC}"
-            echo -e "    Third-party timing operation at line(s): ${line_nums}"
-            echo -e "    ${YELLOW}Use timer service abstraction instead${NC}"
-            FAILED=1
-        fi
-    fi
-done
-
-if [ $FAILED -eq 1 ]; then
-    echo ""
-    echo -e "${RED}  Third-party timing operations detected${NC}"
-    exit 1
-fi
-
-exit 0
-LINT_EOF
-
-chmod +x "${HOOKS_DIR}/15_third_party_timing_operation.sh"
-
-# 7. Detect hardcoded Duration in timing operations
-cat > "${HOOKS_DIR}/16_hardcoded_timing_duration.sh" << 'LINT_EOF'
-#!/bin/bash
-
-# Lint: Hardcoded Duration in timing operations
-# Detects literal Duration in Timer/Future.delayed/Stream.periodic
-
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-APP_DIR="${PROJECT_ROOT}/${APP_DIR_REL}"
-
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-FAILED=0
-
-APP_DIR_NAME=$(basename "$APP_DIR")
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' | grep -E "^${APP_DIR_NAME}/lib/" || true)
-
-if [ -z "$STAGED_FILES" ]; then
-    exit 0
-fi
-
-echo -e "${YELLOW}  Checking for hardcoded Duration...${NC}"
-
-SERVICE_KEYWORDS="service|timer|timing|config"
-
-for file in $STAGED_FILES; do
-    # Skip service/config files
-    if echo "$file" | grep -iE "$SERVICE_KEYWORDS" > /dev/null 2>&1; then
-        continue
-    fi
-
-    # Check for Timer/Future.delayed/Stream.periodic with Duration(
-    if grep -nE "Timer\(.*Duration\(|Future\.delayed\(.*Duration\(|Stream\.periodic\(.*Duration\(" "$file" > /dev/null 2>&1; then
-        line_nums=$(grep -nE "Timer\(.*Duration\(|Future\.delayed\(.*Duration\(|Stream\.periodic\(.*Duration\(" "$file" | cut -d: -f1 | head -5)
-        echo -e "${RED}  ✗ ${file}${NC}"
-        echo -e "    Hardcoded Duration at line(s): ${line_nums}"
-        echo -e "    ${YELLOW}Use TimingConfig duration instead${NC}"
-        FAILED=1
-    fi
-done
-
-if [ $FAILED -eq 1 ]; then
-    echo ""
-    echo -e "${RED}  Hardcoded Duration in timing operations detected${NC}"
-    exit 1
-fi
-
-exit 0
-LINT_EOF
-
-chmod +x "${HOOKS_DIR}/16_hardcoded_timing_duration.sh"
-
-# 8. Detect hardcoded Duration in Animated widgets
-cat > "${HOOKS_DIR}/17_animation_without_config.sh" << 'LINT_EOF'
-#!/bin/bash
-
-# Lint: Animated widgets without TimingConfig
-# Detects hardcoded Duration in AnimatedContainer, AnimatedOpacity, etc.
-
-PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-APP_DIR="${PROJECT_ROOT}/${APP_DIR_REL}"
-
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-FAILED=0
-
-APP_DIR_NAME=$(basename "$APP_DIR")
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.dart$' | grep -E "^${APP_DIR_NAME}/lib/" || true)
-
-if [ -z "$STAGED_FILES" ]; then
-    exit 0
-fi
-
-echo -e "${YELLOW}  Checking for animated widgets without config...${NC}"
-
-for file in $STAGED_FILES; do
-    # Check for Animated* widgets with duration: Duration(
-    if grep -nE "Animated.*\(.*duration:.*Duration\(" "$file" > /dev/null 2>&1; then
-        line_nums=$(grep -nE "Animated.*\(.*duration:.*Duration\(" "$file" | cut -d: -f1 | head -5)
-        echo -e "${RED}  ✗ ${file}${NC}"
-        echo -e "    Animated widget with hardcoded Duration at line(s): ${line_nums}"
-        echo -e "    ${YELLOW}Use TimingConfig.animationDuration instead${NC}"
-        FAILED=1
-    fi
-done
-
-if [ $FAILED -eq 1 ]; then
-    echo ""
-    echo -e "${RED}  Animated widgets without config detected${NC}"
-    exit 1
-fi
-
-exit 0
-LINT_EOF
-
-chmod +x "${HOOKS_DIR}/17_animation_without_config.sh"
-
-# Create README
-cat > "${HOOKS_DIR}/GENERAL_LINT_RULES.md" << 'README_EOF'
-# General Flutter Lint Rules
-
-These pre-commit hooks enforce test quality and timing-related patterns.
+These pre-commit hooks enforce test quality patterns to prevent flaky tests.
 
 ## Rules (All Blocking ❌)
 
-### Test Quality Rules
-
-#### 1. Avoid pumpAndSettle (❌ Blocking)
+### 1. Avoid pumpAndSettle (❌ Blocking)
 **File:** `10_avoid_pump_and_settle.sh`
 **Scope:** Test files only
 
@@ -592,7 +364,7 @@ await tester.pump(const Duration(milliseconds: 100)); // Wait
 await tester.pump(); // Rebuild
 ```
 
-#### 2. Avoid NetworkImage in Tests (❌ Blocking)
+### 2. Avoid NetworkImage in Tests (❌ Blocking)
 **File:** `11_avoid_network_image_in_tests.sh`
 **Scope:** Test/integration_test files only
 
@@ -611,7 +383,7 @@ Image.memory(Uint8List(0), key: const Key('test_image'))
 Image.asset('assets/test_image.png')
 ```
 
-#### 3. Avoid AnimationController.repeat (❌ Blocking)
+### 3. Avoid AnimationController.repeat (❌ Blocking)
 **File:** `12_avoid_animation_repeat.sh`
 **Scope:** Test files only
 
@@ -630,7 +402,7 @@ if (!isTesting) {
 }
 ```
 
-#### 4. Avoid await Future Constructor (❌ Blocking)
+### 4. Avoid await Future Constructor (❌ Blocking)
 **File:** `13_avoid_await_future_constructor.sh`
 **Scope:** Test files only
 
@@ -648,115 +420,19 @@ someAction();
 await tester.pump();
 ```
 
-### Timing Pattern Rules
-
-#### 5. Direct Timing Operations (❌ Blocking)
-**File:** `14_direct_timing_operation.sh`
-**Scope:** lib/ files (production code), excludes service files
-
-**Detects:** `Timer`, `Timer.periodic`, `Future.delayed`, `Stream.periodic` in non-service code
-
-**Why:** Hard to test, violates single responsibility, causes flaky tests.
-
-**Exemptions:**
-- Files containing keywords: `service`, `timer`, `timing`, `debounce`, `throttle`, `scheduler`, `delay`
-- Files with `// timing-allowed` or `// lint:allow-timing` comment
-
-**Fix:**
-```dart
-// ❌ Bad (in widget or business logic)
-Timer(Duration(seconds: 1), () => doSomething());
-
-// ✅ Good (create service)
-class DebounceService {
-  Timer? _timer;
-  void call(VoidCallback cb, Duration duration) {
-    _timer?.cancel();
-    _timer = Timer(duration, cb);
-  }
-}
-
-// Use in widget
-final _debouncer = DebounceService();
-_debouncer.call(() => doSomething(), config.debounceTime);
-```
-
-#### 6. Third-Party Timing Operations (❌ Blocking)
-**File:** `15_third_party_timing_operation.sh`
-**Scope:** lib/ files, excludes service files
-
-**Detects:** rxdart/async/quiver timing methods in non-service code
-
-**Methods checked:**
-- rxdart: `debounceTime`, `throttleTime`, `interval`, `timer`
-- async: `RestartableTimer`, `CancelableOperation`
-- quiver: `Metronome`, `Clock`
-
-**Fix:** Same as rule 5 - encapsulate in service layer.
-
-#### 7. Hardcoded Timing Duration (❌ Blocking)
-**File:** `16_hardcoded_timing_duration.sh`
-**Scope:** lib/ files, excludes service/config files
-
-**Detects:** Literal `Duration(...)` in Timer/Future.delayed/Stream.periodic
-
-**Why:** Durations should be configurable for testability.
-
-**Fix:**
-```dart
-// ❌ Bad
-Timer(Duration(seconds: 1), () => action());
-
-// ✅ Good
-class MyService {
-  final TimingConfig config;
-  MyService(this.config);
-
-  void scheduleAction() {
-    Timer(config.actionDelay, () => action());
-  }
-}
-```
-
-#### 8. Animation Without Config (❌ Blocking)
-**File:** `17_animation_without_config.sh`
-**Scope:** lib/ files
-
-**Detects:** Hardcoded `duration: Duration(...)` in Animated* widgets
-
-**Widgets checked:** AnimatedContainer, AnimatedOpacity, AnimatedPositioned, etc.
-
-**Fix:**
-```dart
-// ❌ Bad
-AnimatedContainer(
-  duration: Duration(milliseconds: 300),
-  child: ...
-)
-
-// ✅ Good
-AnimatedContainer(
-  duration: config.animationDuration,
-  child: ...
-)
-```
-
 ## Summary
 
 | Category | Rules | Focus |
 |----------|-------|-------|
 | **Test Quality** | 4 rules | Prevent flaky test patterns |
-| **Timing Patterns** | 4 rules | Enforce testable timing abstractions |
+
+**Note:** For timing-related rules (11 additional rules), see `GENERAL_LINT_RULES.md` and run `setup-timing-linting-rules.sh`
 
 ## Bypass
 
 ```bash
 # Skip hooks temporarily
 git commit --no-verify
-
-# Or add exemption comment
-// timing-allowed
-Timer(Duration(seconds: 1), () => action());
 ```
 
 ## Testing
@@ -770,32 +446,25 @@ git commit --dry-run
 ```
 README_EOF
 
-echo -e "${GREEN}✓ Lint hook scripts created${NC}"
+echo -e "${GREEN}✓ Test quality lint scripts created${NC}"
 echo ""
 
 echo ""
 echo -e "${GREEN}=== Setup Complete ===${NC}"
 echo ""
-echo -e "${BLUE}Pre-commit hooks installed (all blocking):${NC}"
-echo "  Test Quality Rules:"
-echo "    ✓ Avoid pumpAndSettle"
-echo "    ✓ Avoid NetworkImage in tests"
-echo "    ✓ Avoid AnimationController.repeat"
-echo "    ✓ Avoid await Future constructor"
-echo "  Timing Pattern Rules:"
-echo "    ✓ Direct timing operations"
-echo "    ✓ Third-party timing operations"
-echo "    ✓ Hardcoded timing duration"
-echo "    ✓ Animation without config"
+echo -e "${BLUE}Pre-commit hooks installed (test quality rules):${NC}"
+echo "  ✓ Avoid pumpAndSettle"
+echo "  ✓ Avoid NetworkImage in tests"
+echo "  ✓ Avoid AnimationController.repeat"
+echo "  ✓ Avoid await Future constructor"
 echo ""
 echo -e "${BLUE}Flutter app: ${APP_DIR_REL}${NC}"
 echo ""
 echo -e "${BLUE}Next steps:${NC}"
-echo "  1. Test the hooks: git commit --dry-run"
-echo "  2. Read the docs: ${HOOKS_DIR}/GENERAL_LINT_RULES.md"
-echo "  3. For timing services, add: // timing-allowed"
+echo "  1. For timing rules, run: .fluxid/scripts/setup-timing-linting-rules.sh"
+echo "  2. Test the hooks: git commit --dry-run"
+echo "  3. Read the docs: ${HOOKS_DIR}/TEST_QUALITY_RULES.md"
 echo ""
 echo -e "${YELLOW}Note:${NC} All checks will block commits if they fail."
 echo "To skip: git commit --no-verify"
-echo "Service files are automatically exempted (contain keywords: service, timer, timing, etc.)"
 echo ""
