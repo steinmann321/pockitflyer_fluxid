@@ -24,7 +24,7 @@ milestones:
             complete: true
           - id: m01-e01-t05
             title: Implement iOS Location Permission and Service
-            complete: false
+            complete: true
           - id: m01-e01-t06
             title: Create Flyer Card Widget
             complete: false

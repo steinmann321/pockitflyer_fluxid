@@ -16,3 +16,12 @@ defaults:
 # Enable test randomization for robustness
 # Note: flutter_test honors Dart test flags via environment variable `DART_TEST_OPTIONS`
 # For local runs, you can pass `--test-randomize-ordering-seed=random` if desired
+
+# TDD tags for test-driven development workflow
+tags:
+  tdd_green:
+    description: Passing test (safe to commit)
+  tdd_red:
+    description: Failing test (blocks commit until implemented)
+  tdd_refactor:
+    description: Refactoring in progress (blocks commit until complete)

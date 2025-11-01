@@ -2,9 +2,9 @@
 id: m01-e01-t05
 epic: m01-e01
 title: Implement iOS Location Permission and Service
-status: pending
+status: completed
 priority: high
-tdd_phase: red
+tdd_phase: green
 ---
 
 # Task: Implement iOS Location Permission and Service
@@ -13,14 +13,14 @@ tdd_phase: red
 Create Flutter service to request and manage iOS location permissions and retrieve device location.
 
 ## Acceptance Criteria
-- [ ] LocationService class with methods: `requestPermission()`, `getLocation()`, `getPermissionStatus()`
-- [ ] iOS Info.plist entries: NSLocationWhenInUseUsageDescription with user-friendly text
-- [ ] Permission states: granted, denied, notDetermined, disabled (location services off)
-- [ ] Graceful handling of all permission states
-- [ ] Fallback behavior when permission denied: use default location (0.0, 0.0) or show user message
-- [ ] Location accuracy: best for navigation (kCLLocationAccuracyBest)
-- [ ] Caching: location cached for 5 minutes to reduce battery drain
-- [ ] All tests marked with `tags: ['tdd_green']` after passing
+- [x] LocationService class with methods: `requestPermission()`, `getLocation()`, `getPermissionStatus()`
+- [x] iOS Info.plist entries: NSLocationWhenInUseUsageDescription with user-friendly text
+- [x] Permission states: granted, denied, notDetermined, disabled (location services off)
+- [x] Graceful handling of all permission states
+- [x] Fallback behavior when permission denied: use default location (0.0, 0.0) or show user message
+- [x] Location accuracy: best for navigation (kCLLocationAccuracyBest)
+- [x] Caching: location cached for 5 minutes to reduce battery drain
+- [x] All tests marked with `tags: ['tdd_green']` after passing
 
 ## Test Coverage Requirements
 - Permission request flow for all states (granted, denied, notDetermined, disabled)
