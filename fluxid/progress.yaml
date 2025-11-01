@@ -36,7 +36,7 @@ milestones:
             complete: true
           - id: m01-e01-t09
             title: Performance Optimization and Database Indexing
-            complete: false
+            complete: true
           - id: m01-e01-t10
             title: App Launch Shows Feed E2E Validation
             complete: false
