@@ -33,7 +33,7 @@ milestones:
             complete: true
           - id: m01-e01-t08
             title: Create Home Feed Screen with Pull-to-Refresh
-            complete: false
+            complete: true
           - id: m01-e01-t09
             title: Performance Optimization and Database Indexing
             complete: false
