@@ -2,9 +2,9 @@
 id: m01-e01-t04
 epic: m01-e01
 title: Implement Feed API Endpoint
-status: pending
+status: completed
 priority: high
-tdd_phase: red
+tdd_phase: green
 ---
 
 # Task: Implement Feed API Endpoint
@@ -13,16 +13,16 @@ tdd_phase: red
 Create Django REST API endpoint to retrieve smart-ranked flyer feed based on user location.
 
 ## Acceptance Criteria
-- [ ] GET `/api/v1/flyers/feed/` endpoint
-- [ ] Query parameters: `lat` (required), `lng` (required), `page` (optional), `page_size` (optional, max 50)
-- [ ] Returns paginated list of flyers with complete data
-- [ ] Smart ranking: ORDER BY created_at DESC, then distance ASC (PostgreSQL/PostGIS in production, simple for M01)
-- [ ] Each flyer includes: id, title, description, creator (id, username, profile_picture), images (array), location (address, lat, lng, distance_km), validity (valid_from, valid_until, is_valid)
-- [ ] Distance calculation using Haversine formula
-- [ ] Filters: only returns valid flyers (current datetime within validity period)
-- [ ] Response time: <500ms for 100 flyers (with proper indexing)
-- [ ] Authentication: NOT required (anonymous access)
-- [ ] All tests marked with `@pytest.mark.tdd_green` after passing
+- [x] GET `/api/v1/flyers/feed/` endpoint
+- [x] Query parameters: `lat` (required), `lng` (required), `page` (optional), `page_size` (optional, max 50)
+- [x] Returns paginated list of flyers with complete data
+- [x] Smart ranking: ORDER BY created_at DESC, then distance ASC (PostgreSQL/PostGIS in production, simple for M01)
+- [x] Each flyer includes: id, title, description, creator (id, username, profile_picture), images (array), location (address, lat, lng, distance_km), validity (valid_from, valid_until, is_valid)
+- [x] Distance calculation using Haversine formula
+- [x] Filters: only returns valid flyers (current datetime within validity period)
+- [x] Response time: <500ms for 100 flyers (with proper indexing)
+- [x] Authentication: NOT required (anonymous access)
+- [x] All tests marked with `@pytest.mark.tdd_green` after passing
 
 ## Test Coverage Requirements
 - Successful feed retrieval with various user locations

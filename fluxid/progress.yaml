@@ -21,7 +21,7 @@ milestones:
             complete: true
           - id: m01-e01-t04
             title: Implement Feed API Endpoint
-            complete: false
+            complete: true
           - id: m01-e01-t05
             title: Implement iOS Location Permission and Service
             complete: false
