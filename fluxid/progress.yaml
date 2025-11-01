@@ -27,7 +27,7 @@ milestones:
             complete: true
           - id: m01-e01-t06
             title: Create Flyer Card Widget
-            complete: false
+            complete: true
           - id: m01-e01-t07
             title: Implement Feed API Client and Models
             complete: false

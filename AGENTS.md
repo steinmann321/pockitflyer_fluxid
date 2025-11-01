@@ -88,7 +88,7 @@ All tests must include TDD markers (implementation: `@pytest.mark.tdd_*` for Pyt
 - YOU are responsible to fix them all. 
 - YOU want to to do a clean commit on a clean codebase with NO EXCEPTION. 
 
-**Pre-commit hooks** (fast, smart selection):
+**Pre-commit hooks** (fail-fast, smart selection):
 - Backend: Uses `pytest-testmon` to run only tests affected by code changes
 - Flutter: Maps changed `lib/*.dart` files to corresponding `test/*_test.dart` files
 - Coverage: Enforces ≥90% project wide
@@ -102,5 +102,5 @@ All tests must include TDD markers (implementation: `@pytest.mark.tdd_*` for Pyt
 **CRITICAL REMINDER**: !!NON RUNNING TESTS WILL BE REJECTED AUTOMATICALLY BY REVIEWERS!!
 - YOU are responsible to fix ANY issue, related to your current work or not
 - YOU are responsible ALL specifcations are met and ALL tests are running
-- YOU are **HONEST** and **ALWAYS** follow the rules - no exceptiosn, no excuses and even if you might have the impression they are a bit too strict. 
+- YOU are **HONEST** and **ALWAYS** follow the rules - no exceptions, no excuses and even if you might have the impression they are too strict. 
 - WHY this is important? The rules are carefully crafted to create long term value and a enterprise ready codebase
