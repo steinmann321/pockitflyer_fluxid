@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pockitflyer_app/models/flyer.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class FlyerCard extends StatefulWidget {
   const FlyerCard({
@@ -20,27 +21,40 @@ class FlyerCard extends StatefulWidget {
 class _FlyerCardState extends State<FlyerCard> {
   int _currentImageIndex = 0;
   bool _isDescriptionExpanded = false;
+  bool _isVisible = false;
+
+  void _handleVisibilityChanged(VisibilityInfo info) {
+    if (info.visibleFraction > 0 && !_isVisible) {
+      setState(() {
+        _isVisible = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(key: const Key('card_tap_detector'),
-      onTap: () {
-        // TODO(M01-E03): Navigate to flyer detail screen
-      },
-      child: Card(
-        key: widget.key,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildCreatorHeader(),
-            _buildImageCarousel(),
-            _buildCardContent(),
-          ],
+    return VisibilityDetector(
+      key: Key('flyer_visibility_${widget.flyer.id}'),
+      onVisibilityChanged: _handleVisibilityChanged,
+      child: GestureDetector(key: const Key('card_tap_detector'),
+        onTap: () {
+          // TODO(M01-E03): Navigate to flyer detail screen
+        },
+        child: Card(
+          key: widget.key,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCreatorHeader(),
+              _buildImageCarousel(),
+              _buildCardContent(),
+            ],
+          ),
         ),
       ),
     );
@@ -105,6 +119,15 @@ class _FlyerCardState extends State<FlyerCard> {
   Widget _buildImageCarousel() {
     if (widget.flyer.images.isEmpty) {
       return const SizedBox.shrink();
+    }
+
+    if (!_isVisible) {
+      return Container(
+        key: const Key('image_carousel_placeholder'),
+        height: 250,
+        width: double.infinity,
+        color: Colors.grey[300],
+      );
     }
 
     if (widget.flyer.images.length == 1) {

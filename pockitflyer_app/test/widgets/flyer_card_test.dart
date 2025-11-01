@@ -6,8 +6,14 @@ import 'package:pockitflyer_app/models/creator.dart';
 import 'package:pockitflyer_app/models/flyer.dart';
 import 'package:pockitflyer_app/models/flyer_image.dart';
 import 'package:pockitflyer_app/widgets/flyer_card.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 void main() {
+  setUpAll(() {
+    // Disable VisibilityDetector callbacks for all tests
+    VisibilityDetectorController.instance.updateInterval = Duration.zero;
+  });
+
   group('FlyerCard Widget Tests', () {
     late Flyer testFlyer;
 
@@ -303,141 +309,157 @@ void main() {
 
   group('FlyerCard Image Carousel Tests', () {
     testWidgets('displays single image without carousel controls', (tester) async {
-      final flyer = Flyer(
-        id: 1,
-        title: 'Single Image Flyer',
-        description: 'Description',
-        creator: Creator(id: 1, username: 'user'),
-        images: [
-          FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
-        ],
-        locationAddress: 'Address',
-        latitude: 0,
-        longitude: 0,
-        distanceKm: 1,
-        validFrom: DateTime(2025, 1, 1),
-        validUntil: DateTime(2025, 12, 31),
-        isValid: true,
-      );
+      await mockNetworkImages(() async {
+        final flyer = Flyer(
+          id: 1,
+          title: 'Single Image Flyer',
+          description: 'Description',
+          creator: Creator(id: 1, username: 'user'),
+          images: [
+            FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
+          ],
+          locationAddress: 'Address',
+          latitude: 0,
+          longitude: 0,
+          distanceKm: 1,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+            ),
           ),
-        ),
-      );
+        );
 
-      expect(find.byKey(const Key('image_carousel')), findsOneWidget);
-      expect(find.byKey(const Key('carousel_indicator')), findsNothing);
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('image_carousel')), findsOneWidget);
+        expect(find.byKey(const Key('carousel_indicator')), findsNothing);
+      });
     }, tags: ['tdd_green']);
 
     testWidgets('displays carousel with position indicator for multiple images',
         (tester) async {
-      final flyer = Flyer(
-        id: 1,
-        title: 'Multi Image Flyer',
-        description: 'Description',
-        creator: Creator(id: 1, username: 'user'),
-        images: [
-          FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
-          FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
-          FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
-        ],
-        locationAddress: 'Address',
-        latitude: 0,
-        longitude: 0,
-        distanceKm: 1,
-        validFrom: DateTime(2025, 1, 1),
-        validUntil: DateTime(2025, 12, 31),
-        isValid: true,
-      );
+      await mockNetworkImages(() async {
+        final flyer = Flyer(
+          id: 1,
+          title: 'Multi Image Flyer',
+          description: 'Description',
+          creator: Creator(id: 1, username: 'user'),
+          images: [
+            FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
+            FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
+            FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
+          ],
+          locationAddress: 'Address',
+          latitude: 0,
+          longitude: 0,
+          distanceKm: 1,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+            ),
           ),
-        ),
-      );
+        );
 
-      expect(find.byKey(const Key('image_carousel')), findsOneWidget);
-      expect(find.byKey(const Key('carousel_indicator')), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(const Key('image_carousel')), findsOneWidget);
+        expect(find.byKey(const Key('carousel_indicator')), findsOneWidget);
+      });
     }, tags: ['tdd_green']);
 
     testWidgets('carousel has swipe callback configured', (tester) async {
-      final flyer = Flyer(
-        id: 1,
-        title: 'Multi Image Flyer',
-        description: 'Description',
-        creator: Creator(id: 1, username: 'user'),
-        images: [
-          FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
-          FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
-          FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
-        ],
-        locationAddress: 'Address',
-        latitude: 0,
-        longitude: 0,
-        distanceKm: 1,
-        validFrom: DateTime(2025, 1, 1),
-        validUntil: DateTime(2025, 12, 31),
-        isValid: true,
-      );
+      await mockNetworkImages(() async {
+        final flyer = Flyer(
+          id: 1,
+          title: 'Multi Image Flyer',
+          description: 'Description',
+          creator: Creator(id: 1, username: 'user'),
+          images: [
+            FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
+            FlyerImage(url: 'https://example.com/image2.jpg', order: 1),
+            FlyerImage(url: 'https://example.com/image3.jpg', order: 2),
+          ],
+          locationAddress: 'Address',
+          latitude: 0,
+          longitude: 0,
+          distanceKm: 1,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+            ),
           ),
-        ),
-      );
+        );
 
-      // Verify carousel is rendered
-      expect(find.byKey(const Key('image_carousel')), findsOneWidget);
+        await tester.pumpAndSettle();
 
-      // Verify position indicator shows initial state (1/3)
-      expect(find.text('1 / 3'), findsOneWidget);
+        // Verify carousel is rendered
+        expect(find.byKey(const Key('image_carousel')), findsOneWidget);
 
-      // CarouselSlider swipe behavior is configured via CarouselOptions.onPageChanged
-      // Actual swipe testing requires integration tests due to gesture complexity
-      // This test verifies the carousel structure and initial state
+        // Verify position indicator shows initial state (1/3)
+        expect(find.text('1 / 3'), findsOneWidget);
+
+        // CarouselSlider swipe behavior is configured via CarouselOptions.onPageChanged
+        // Actual swipe testing requires integration tests due to gesture complexity
+        // This test verifies the carousel structure and initial state
+      });
     }, tags: ['tdd_green']);
   });
 
   group('FlyerCard Loading and Error States', () {
     testWidgets('has loading state configured for images', (tester) async {
-      final flyer = Flyer(
-        id: 1,
-        title: 'Test Flyer',
-        description: 'Description',
-        creator: Creator(id: 1, username: 'user'),
-        images: [
-          FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
-        ],
-        locationAddress: 'Address',
-        latitude: 0,
-        longitude: 0,
-        distanceKm: 1,
-        validFrom: DateTime(2025, 1, 1),
-        validUntil: DateTime(2025, 12, 31),
-        isValid: true,
-      );
+      await mockNetworkImages(() async {
+        final flyer = Flyer(
+          id: 1,
+          title: 'Test Flyer',
+          description: 'Description',
+          creator: Creator(id: 1, username: 'user'),
+          images: [
+            FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
+          ],
+          locationAddress: 'Address',
+          latitude: 0,
+          longitude: 0,
+          distanceKm: 1,
+          validFrom: DateTime(2025, 1, 1),
+          validUntil: DateTime(2025, 12, 31),
+          isValid: true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: FlyerCard(key: const Key('flyer_card'), flyer: flyer),
+            ),
           ),
-        ),
-      );
+        );
 
-      // Verify image widget exists (loading builder is configured in implementation)
-      expect(find.byType(Image), findsAtLeastNWidgets(1));
+        await tester.pumpAndSettle();
 
-      // The loading builder with shimmer key is configured in the widget
-      // but only appears during actual loading, which doesn't happen in tests
-      // This test verifies the widget structure supports loading states
+        // Verify image widget exists (loading builder is configured in implementation)
+        expect(find.byType(Image), findsAtLeastNWidgets(1));
+
+        // The loading builder with shimmer key is configured in the widget
+        // but only appears during actual loading, which doesn't happen in tests
+        // This test verifies the widget structure supports loading states
+      });
     }, tags: ['tdd_green']);
 
     testWidgets('shows placeholder on image load error', (tester) async {
@@ -465,6 +487,8 @@ void main() {
           ),
         ),
       );
+
+      await tester.pumpAndSettle();
 
       // Wait for error to occur
       await tester.pump(const Duration(seconds: 1));
@@ -881,6 +905,104 @@ void main() {
           find.byType(FlyerCard),
           matchesGoldenFile('goldens/flyer_card_long_description.png'),
         );
+      });
+    }, tags: ['tdd_green']);
+  });
+
+  group('FlyerCard Lazy Loading Tests', () {
+    late Flyer testFlyer;
+
+    setUp(() {
+      testFlyer = Flyer(
+        id: 1,
+        title: 'Test Flyer',
+        description: 'Description',
+        creator: Creator(id: 1, username: 'user'),
+        images: [
+          FlyerImage(url: 'https://example.com/image1.jpg', order: 0),
+        ],
+        locationAddress: 'Address',
+        latitude: 0,
+        longitude: 0,
+        distanceKm: 1,
+        validFrom: DateTime(2025, 1, 1),
+        validUntil: DateTime(2025, 12, 31),
+        isValid: true,
+      );
+    });
+
+    testWidgets('has VisibilityDetector wrapper', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ListView(
+                children: [
+                  FlyerCard(key: const Key('flyer_card'), flyer: testFlyer),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Verify VisibilityDetector is present
+        expect(find.byType(VisibilityDetector), findsOneWidget);
+      });
+    }, tags: ['tdd_green']);
+
+    testWidgets('loads images when card is in viewport', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ListView(
+                children: [
+                  FlyerCard(key: const Key('flyer_card'), flyer: testFlyer),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        // Initial render - card is visible
+        await tester.pumpAndSettle();
+
+        // With updateInterval = Duration.zero, visibility triggers immediately
+        // Verify images are loaded for visible card
+        expect(find.byKey(const Key('image_carousel')), findsOneWidget);
+      });
+    }, tags: ['tdd_green']);
+
+    testWidgets('maintains state after scrolling', (tester) async {
+      await mockNetworkImages(() async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: ListView(
+                children: [
+                  FlyerCard(key: const Key('flyer_card'), flyer: testFlyer),
+                  const SizedBox(height: 1000),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        // Verify initial state has images loaded
+        expect(find.byKey(const Key('image_carousel')), findsOneWidget);
+
+        // Scroll down and back up
+        await tester.drag(find.byType(ListView), const Offset(0, -500));
+        await tester.pumpAndSettle();
+        await tester.drag(find.byType(ListView), const Offset(0, 500));
+        await tester.pumpAndSettle();
+
+        // State should persist - images still loaded
+        expect(find.byKey(const Key('image_carousel')), findsOneWidget);
       });
     }, tags: ['tdd_green']);
   });

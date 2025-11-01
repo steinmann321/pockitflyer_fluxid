@@ -13,12 +13,18 @@ import 'package:pockitflyer_app/screens/home_screen.dart';
 import 'package:pockitflyer_app/services/feed_api_client.dart';
 import 'package:pockitflyer_app/services/location_service.dart';
 import 'package:pockitflyer_app/widgets/flyer_card.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class MockFeedApiClient extends Mock implements FeedApiClient {}
 
 class MockLocationService extends Mock implements LocationService {}
 
 void main() {
+  setUpAll(() {
+    // Disable VisibilityDetector callbacks for all tests
+    VisibilityDetectorController.instance.updateInterval = Duration.zero;
+  });
+
   group('HomeScreen', () {
     late FeedApiClient mockFeedApiClient;
     late LocationService mockLocationService;
