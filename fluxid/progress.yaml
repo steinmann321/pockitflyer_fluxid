@@ -18,7 +18,7 @@ milestones:
             complete: true
           - id: m01-e01-t03
             title: Implement Geocoding Service with Circuit Breaker
-            complete: false
+            complete: true
           - id: m01-e01-t04
             title: Implement Feed API Endpoint
             complete: false
